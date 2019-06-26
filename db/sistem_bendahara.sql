@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 22, 2019 at 06:51 AM
+-- Generation Time: Jun 26, 2019 at 09:00 AM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -21,36 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `sistem_bendahara`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cicilan_bimbel`
---
-
-CREATE TABLE `cicilan_bimbel` (
-  `pembayaran_id` int(11) NOT NULL,
-  `jumlah` int(11) NOT NULL,
-  `tgl_pembayaran` date NOT NULL,
-  `pegawai_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Triggers `cicilan_bimbel`
---
-DELIMITER $$
-CREATE TRIGGER `tr_cek_lunas_cicilan_bimbel` AFTER INSERT ON `cicilan_bimbel` FOR EACH ROW BEGIN
-	declare total int(11);
-    declare total_cicilan int(11);
-    select jumlah into total from v_lihatpembayaranbimbel;
-    select sum(jumlah) into total_cicilan from cicilan_bimbel where pembayaran_id = new.pembayaran_id;
-    
-    if(total = total_cicilan) THEN
-    	update pembayaran_bimbel set status = 'Lunas' where pembayaran_id = new.pembayaran_id;
-    end if;
-end
-$$
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -79,7 +49,7 @@ INSERT INTO `jenis_tagihan` (`tagihan_id`, `nama_tagihan`, `jumlah`, `keterangan
 --
 
 CREATE TABLE `pegawai` (
-  `id` int(11) NOT NULL,
+  `pegawai_id` int(11) NOT NULL,
   `nama_depan` varchar(25) NOT NULL,
   `nama_belakang` varchar(50) NOT NULL,
   `no_handphone` varchar(14) NOT NULL,
@@ -91,7 +61,7 @@ CREATE TABLE `pegawai` (
 -- Dumping data for table `pegawai`
 --
 
-INSERT INTO `pegawai` (`id`, `nama_depan`, `nama_belakang`, `no_handphone`, `alamat`, `level`) VALUES
+INSERT INTO `pegawai` (`pegawai_id`, `nama_depan`, `nama_belakang`, `no_handphone`, `alamat`, `level`) VALUES
 (100001, 'Ananda', 'Muharriz Sinaga', '+6287898365680', 'Jl. Pala Raya No.77 Perumnas Simalingkar', 'Bendahara');
 
 -- --------------------------------------------------------
@@ -102,10 +72,93 @@ INSERT INTO `pegawai` (`id`, `nama_depan`, `nama_belakang`, `no_handphone`, `ala
 
 CREATE TABLE `pembayaran_bimbel` (
   `pembayaran_id` int(11) NOT NULL,
-  `NIS` varchar(16) NOT NULL,
-  `tagihan_id` int(11) NOT NULL,
-  `tahun_ajaran` varchar(9) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `tgl_pembayaran` date NOT NULL,
+  `pegawai_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Triggers `pembayaran_bimbel`
+--
+DELIMITER $$
+CREATE TRIGGER `tr_cek_lunas_cicilan_bimbel` AFTER INSERT ON `pembayaran_bimbel` FOR EACH ROW BEGIN
+	declare total int(11);
+    declare total_cicilan int(11);
+    select jumlah into total from v_lihatpembayaranbimbel;
+    select sum(jumlah) into total_cicilan from cicilan_bimbel where pembayaran_id = new.pembayaran_id;
+    
+    if(total = total_cicilan) THEN
+    	update pembayaran_bimbel set status = 'Lunas' where pembayaran_id = new.pembayaran_id;
+    end if;
+end
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pembayaran_buku`
+--
+
+CREATE TABLE `pembayaran_buku` (
+  `pembayaran_id` int(11) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `tgl_pembayaran` date NOT NULL,
+  `pegawai_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pembayaran_pembangunan`
+--
+
+CREATE TABLE `pembayaran_pembangunan` (
+  `pembayaran_id` int(11) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `tgl_pembayaran` date NOT NULL,
+  `pegawai_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pembayaran_pondok`
+--
+
+CREATE TABLE `pembayaran_pondok` (
+  `pembayaran_id` int(11) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `tgl_pembayaran` date NOT NULL,
+  `pegawai_id` int(11) NOT NULL,
+  `potongan` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pembayaran_spp`
+--
+
+CREATE TABLE `pembayaran_spp` (
+  `pembayaran_id` int(11) NOT NULL,
+  `bulan` enum('1','2','3','4','5','6','7','8','9','10','11','12') NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `pegawai_id` int(11) NOT NULL,
   `status` enum('Lunas','Belum Lunas') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pengeluaran`
+--
+
+CREATE TABLE `pengeluaran` (
+  `pengeluaran_id` int(11) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `tgl_dipakai` date NOT NULL,
+  `keterangan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -126,35 +179,95 @@ CREATE TABLE `siswa` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `v_lihatpembayaranbimbel`
--- (See below for the actual view)
+-- Table structure for table `uang_bimbel`
 --
-CREATE TABLE `v_lihatpembayaranbimbel` (
-`pembayaran_id` int(11)
-,`nama` varchar(60)
-,`jumlah` int(11)
-,`status` enum('Lunas','Belum Lunas')
-);
+
+CREATE TABLE `uang_bimbel` (
+  `pembayaran_id` int(11) NOT NULL,
+  `NIS` varchar(16) NOT NULL,
+  `tagihan_id` int(11) NOT NULL,
+  `tahun_ajaran` varchar(9) NOT NULL,
+  `semester` enum('Genap','Ganjil') NOT NULL,
+  `status` enum('Lunas','Belum Lunas') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `v_lihatpembayaranbimbel`
+-- Table structure for table `uang_buku`
 --
-DROP TABLE IF EXISTS `v_lihatpembayaranbimbel`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranbimbel`  AS  select `pembayaran_bimbel`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`nama` AS `nama`,`jenis_tagihan`.`jumlah` AS `jumlah`,`pembayaran_bimbel`.`status` AS `status` from ((`pembayaran_bimbel` join `siswa`) join `jenis_tagihan` on(((`pembayaran_bimbel`.`NIS` = `siswa`.`NIS`) and (`pembayaran_bimbel`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) ;
+CREATE TABLE `uang_buku` (
+  `pembayaran_id` int(11) NOT NULL,
+  `NIS` varchar(16) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `tahun_ajaran` varchar(9) NOT NULL,
+  `semester` enum('Ganjil','Genap') NOT NULL,
+  `status` enum('Lunas','Belum Lunas') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uang_infaq`
+--
+
+CREATE TABLE `uang_infaq` (
+  `donatur_id` int(11) NOT NULL,
+  `nama_lengkap` varchar(60) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `tanggal_diterima` date NOT NULL,
+  `pegawai_id` int(11) NOT NULL,
+  `keterangan` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uang_pembangunan`
+--
+
+CREATE TABLE `uang_pembangunan` (
+  `pembayaran_id` int(11) NOT NULL,
+  `NIS` varchar(16) NOT NULL,
+  `tagihan_id` int(11) NOT NULL,
+  `tahun_ajaran` varchar(9) NOT NULL,
+  `semester` enum('Ganjil','Genap') NOT NULL,
+  `status` enum('Lunas','Belum Lunas') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uang_pondok`
+--
+
+CREATE TABLE `uang_pondok` (
+  `pembayaran_id` int(11) NOT NULL,
+  `NIS` varchar(16) NOT NULL,
+  `tagihan_id` int(11) NOT NULL,
+  `tahun` int(5) NOT NULL,
+  `bulan` int(5) NOT NULL,
+  `status` enum('Lunas','Belum Lunas') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uang_spp`
+--
+
+CREATE TABLE `uang_spp` (
+  `pembayaran_id` int(11) NOT NULL,
+  `NIS` varchar(16) NOT NULL,
+  `tagihan_id` int(11) NOT NULL,
+  `tahun_ajaran` varchar(9) NOT NULL,
+  `semester` enum('Ganjil','Genap') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `cicilan_bimbel`
---
-ALTER TABLE `cicilan_bimbel`
-  ADD KEY `constraint_cb_1` (`pegawai_id`),
-  ADD KEY `constraint_cb_2` (`pembayaran_id`);
 
 --
 -- Indexes for table `jenis_tagihan`
@@ -166,21 +279,100 @@ ALTER TABLE `jenis_tagihan`
 -- Indexes for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`pegawai_id`);
 
 --
 -- Indexes for table `pembayaran_bimbel`
 --
 ALTER TABLE `pembayaran_bimbel`
-  ADD PRIMARY KEY (`pembayaran_id`),
-  ADD KEY `constraint_pb_1` (`NIS`),
-  ADD KEY `constraint_pb_2` (`tagihan_id`);
+  ADD KEY `constraint_cb_1` (`pegawai_id`),
+  ADD KEY `constraint_cb_2` (`pembayaran_id`);
+
+--
+-- Indexes for table `pembayaran_buku`
+--
+ALTER TABLE `pembayaran_buku`
+  ADD KEY `pembayaran_buku_constraint_1` (`pegawai_id`),
+  ADD KEY `pembayaran_buku_constraint_2` (`pembayaran_id`);
+
+--
+-- Indexes for table `pembayaran_pembangunan`
+--
+ALTER TABLE `pembayaran_pembangunan`
+  ADD KEY `pembayaran_pembangunan_1` (`pembayaran_id`),
+  ADD KEY `pembayaran_pembangunan_2` (`pegawai_id`);
+
+--
+-- Indexes for table `pembayaran_pondok`
+--
+ALTER TABLE `pembayaran_pondok`
+  ADD KEY `pembayaran_pondok_constraint_1` (`pegawai_id`),
+  ADD KEY `pembayaran_pondok_constraint_2` (`pembayaran_id`);
+
+--
+-- Indexes for table `pembayaran_spp`
+--
+ALTER TABLE `pembayaran_spp`
+  ADD KEY `pembayaran_spp_constraint_1` (`pembayaran_id`),
+  ADD KEY `pembayaran_spp_constraint_2` (`pegawai_id`);
+
+--
+-- Indexes for table `pengeluaran`
+--
+ALTER TABLE `pengeluaran`
+  ADD PRIMARY KEY (`pengeluaran_id`);
 
 --
 -- Indexes for table `siswa`
 --
 ALTER TABLE `siswa`
   ADD PRIMARY KEY (`NIS`);
+
+--
+-- Indexes for table `uang_bimbel`
+--
+ALTER TABLE `uang_bimbel`
+  ADD PRIMARY KEY (`pembayaran_id`),
+  ADD KEY `constraint_pb_1` (`NIS`),
+  ADD KEY `constraint_pb_2` (`tagihan_id`);
+
+--
+-- Indexes for table `uang_buku`
+--
+ALTER TABLE `uang_buku`
+  ADD PRIMARY KEY (`pembayaran_id`),
+  ADD KEY `uang_buku_constraint_1` (`NIS`);
+
+--
+-- Indexes for table `uang_infaq`
+--
+ALTER TABLE `uang_infaq`
+  ADD PRIMARY KEY (`donatur_id`),
+  ADD KEY `uang_infaq_constraint_1` (`pegawai_id`);
+
+--
+-- Indexes for table `uang_pembangunan`
+--
+ALTER TABLE `uang_pembangunan`
+  ADD PRIMARY KEY (`pembayaran_id`),
+  ADD KEY `uang_pembangunan_constraint_1` (`NIS`),
+  ADD KEY `uang_pembangunan_constraint_2` (`tagihan_id`);
+
+--
+-- Indexes for table `uang_pondok`
+--
+ALTER TABLE `uang_pondok`
+  ADD PRIMARY KEY (`pembayaran_id`),
+  ADD KEY `uang_pondok_constraint_1` (`NIS`),
+  ADD KEY `uang_pondok_constraint_2` (`tagihan_id`);
+
+--
+-- Indexes for table `uang_spp`
+--
+ALTER TABLE `uang_spp`
+  ADD PRIMARY KEY (`pembayaran_id`),
+  ADD KEY `uang_spp_constraint_1` (`NIS`),
+  ADD KEY `uang_spp_constraint_2` (`tagihan_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -196,12 +388,48 @@ ALTER TABLE `jenis_tagihan`
 -- AUTO_INCREMENT for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100002;
+  MODIFY `pegawai_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100002;
 
 --
--- AUTO_INCREMENT for table `pembayaran_bimbel`
+-- AUTO_INCREMENT for table `pengeluaran`
 --
-ALTER TABLE `pembayaran_bimbel`
+ALTER TABLE `pengeluaran`
+  MODIFY `pengeluaran_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uang_bimbel`
+--
+ALTER TABLE `uang_bimbel`
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uang_buku`
+--
+ALTER TABLE `uang_buku`
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uang_infaq`
+--
+ALTER TABLE `uang_infaq`
+  MODIFY `donatur_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uang_pembangunan`
+--
+ALTER TABLE `uang_pembangunan`
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uang_pondok`
+--
+ALTER TABLE `uang_pondok`
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uang_spp`
+--
+ALTER TABLE `uang_spp`
   MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -209,18 +437,79 @@ ALTER TABLE `pembayaran_bimbel`
 --
 
 --
--- Constraints for table `cicilan_bimbel`
---
-ALTER TABLE `cicilan_bimbel`
-  ADD CONSTRAINT `constraint_cb_1` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `constraint_cb_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `pembayaran_bimbel` (`pembayaran_id`) ON UPDATE CASCADE;
-
---
 -- Constraints for table `pembayaran_bimbel`
 --
 ALTER TABLE `pembayaran_bimbel`
+  ADD CONSTRAINT `constraint_cb_1` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `constraint_cb_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_bimbel` (`pembayaran_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pembayaran_buku`
+--
+ALTER TABLE `pembayaran_buku`
+  ADD CONSTRAINT `pembayaran_buku_constraint_1` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `pembayaran_buku_constraint_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_buku` (`pembayaran_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pembayaran_pembangunan`
+--
+ALTER TABLE `pembayaran_pembangunan`
+  ADD CONSTRAINT `pembayaran_pembangunan_1` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_pembangunan` (`pembayaran_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `pembayaran_pembangunan_2` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pembayaran_pondok`
+--
+ALTER TABLE `pembayaran_pondok`
+  ADD CONSTRAINT `pembayaran_pondok_constraint_1` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `pembayaran_pondok_constraint_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_pondok` (`pembayaran_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pembayaran_spp`
+--
+ALTER TABLE `pembayaran_spp`
+  ADD CONSTRAINT `pembayaran_spp_constraint_1` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_spp` (`pembayaran_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `pembayaran_spp_constraint_2` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `uang_bimbel`
+--
+ALTER TABLE `uang_bimbel`
   ADD CONSTRAINT `constraint_pb_1` FOREIGN KEY (`NIS`) REFERENCES `siswa` (`NIS`) ON UPDATE CASCADE,
   ADD CONSTRAINT `constraint_pb_2` FOREIGN KEY (`tagihan_id`) REFERENCES `jenis_tagihan` (`tagihan_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `uang_buku`
+--
+ALTER TABLE `uang_buku`
+  ADD CONSTRAINT `uang_buku_constraint_1` FOREIGN KEY (`NIS`) REFERENCES `siswa` (`NIS`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `uang_infaq`
+--
+ALTER TABLE `uang_infaq`
+  ADD CONSTRAINT `uang_infaq_constraint_1` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `uang_pembangunan`
+--
+ALTER TABLE `uang_pembangunan`
+  ADD CONSTRAINT `uang_pembangunan_constraint_1` FOREIGN KEY (`NIS`) REFERENCES `siswa` (`NIS`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `uang_pembangunan_constraint_2` FOREIGN KEY (`tagihan_id`) REFERENCES `jenis_tagihan` (`tagihan_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `uang_pondok`
+--
+ALTER TABLE `uang_pondok`
+  ADD CONSTRAINT `uang_pondok_constraint_1` FOREIGN KEY (`NIS`) REFERENCES `siswa` (`NIS`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `uang_pondok_constraint_2` FOREIGN KEY (`tagihan_id`) REFERENCES `jenis_tagihan` (`tagihan_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `uang_spp`
+--
+ALTER TABLE `uang_spp`
+  ADD CONSTRAINT `uang_spp_constraint_1` FOREIGN KEY (`NIS`) REFERENCES `siswa` (`NIS`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `uang_spp_constraint_2` FOREIGN KEY (`tagihan_id`) REFERENCES `jenis_tagihan` (`tagihan_id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
