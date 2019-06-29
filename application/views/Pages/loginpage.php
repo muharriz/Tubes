@@ -32,7 +32,7 @@
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('<?php echo base_url()?>assets/img/bg-01.jpg');">
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-				<form class="login100-form validate-form" action="<?php echo base_url()?>Main_Controller/login" method="post">
+				<form class="login100-form validate-form" action="<?php echo base_url()?>index.php/Main_Controller/login" method="post">
 					<span class="login100-form-title p-b-49">
 						Login
 					</span>
