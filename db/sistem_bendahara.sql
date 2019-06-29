@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 26, 2019 at 09:00 AM
+-- Generation Time: Jun 29, 2019 at 11:53 AM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -21,6 +21,18 @@ SET time_zone = "+00:00";
 --
 -- Database: `sistem_bendahara`
 --
+
+DELIMITER $$
+--
+-- Functions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `cek_user` (`nip` VARCHAR(50), `password` VARCHAR(50)) RETURNS INT(5) begin
+	declare result int(5);
+    select count(pegawai_id) into result from pegawai where pegawai_id = nip and pegawai_password = password;
+    return result;
+end$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -50,6 +62,7 @@ INSERT INTO `jenis_tagihan` (`tagihan_id`, `nama_tagihan`, `jumlah`, `keterangan
 
 CREATE TABLE `pegawai` (
   `pegawai_id` int(11) NOT NULL,
+  `pegawai_password` varchar(50) NOT NULL,
   `nama_depan` varchar(25) NOT NULL,
   `nama_belakang` varchar(50) NOT NULL,
   `no_handphone` varchar(14) NOT NULL,
@@ -61,8 +74,8 @@ CREATE TABLE `pegawai` (
 -- Dumping data for table `pegawai`
 --
 
-INSERT INTO `pegawai` (`pegawai_id`, `nama_depan`, `nama_belakang`, `no_handphone`, `alamat`, `level`) VALUES
-(100001, 'Ananda', 'Muharriz Sinaga', '+6287898365680', 'Jl. Pala Raya No.77 Perumnas Simalingkar', 'Bendahara');
+INSERT INTO `pegawai` (`pegawai_id`, `pegawai_password`, `nama_depan`, `nama_belakang`, `no_handphone`, `alamat`, `level`) VALUES
+(100001, 'root', 'Ananda', 'Muharriz Sinaga', '+6287898365680', 'Jl. Pala Raya No.77 Perumnas Simalingkar', 'Bendahara');
 
 -- --------------------------------------------------------
 
