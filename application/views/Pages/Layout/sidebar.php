@@ -20,14 +20,38 @@
 	        <ul class="nav">
 	          <li class="active ">
 	            <a href="./dashboard.html">
-	              <i class="nc-icon nc-bank"></i>
-	              <p>Pemasukan</p>
-	            </a>
+				  <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="nc-icon nc-bank"></i>Pemasukan</a>
+					<ul class="collapse list-unstyled" id="pageSubmenu">
+						<li>
+							<a href="#">Uang Spp</a>
+						</li>
+						<li>
+							<a href="#">Uang Pondok</a>
+						</li>
+						<li>
+							<a href="#">Uang Buku</a>
+						</li>
+						<li>
+							<a href="#">Uang Pembangunan</a>
+						</li>
+						<li>
+							<a href="#">Uang Bimbel</a>
+						</li>
+						</ul>
+				  </a>
 	          </li>
 	          <li>
 	            <a href="./icons.html">
-	              <i class="nc-icon nc-diamond"></i>
-	              <p>Pengeluaran</p>
+	              <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="nc-icon nc-diamond"></i>Pengeluaran</a>
+					<ul class="collapse list-unstyled" id="pageSubmenu2">
+						<li>
+							<a href="#">Input Pengeluaran</a>
+						</li>
+						<li>
+							<a href="#">Lihat Pengeluaran</a>
+						</li>
+						</ul>
+				  </a>
 	            </a>
 	          </li>
 	          <li class="active-pro">

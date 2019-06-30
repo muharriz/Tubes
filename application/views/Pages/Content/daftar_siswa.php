@@ -26,7 +26,7 @@
 						<label for="inputEmail4">Tanggal Masuk</label>
 						<input type="date" class="form-control" id="tanggal">
 						</br>
-						<center><button type="button" class="btn btn-primary">Daftar</button></center>
+						<div class="col-md-4 offset-md-8"><button type="button" class="btn btn-primary">Daftar</button></div>
 					</div>
 					<div class="form-group col-md-4">
 					</div>
