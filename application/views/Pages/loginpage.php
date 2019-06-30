@@ -36,7 +36,11 @@
 					<span class="login100-form-title p-b-49">
 						Login
 					</span>
-
+					<!--Alert Jika username atau password salah-->
+					<?php if($this->session->flashdata('eror_no_user')){ ?>
+						<div class="alert alert-danger"><?php echo $this->session->flashdata('eror_no_user');?></div>
+					<?php } ?>
+					<!--/Alert Jika username atau password salah-->
 					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">
 						<span class="label-input100">ID Pegawai</span>
 						<input class="input100" type="text" name="nip" placeholder="Masukkan ID anda">
