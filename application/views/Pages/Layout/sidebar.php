@@ -54,12 +54,6 @@
 				  </a>
 	            </a>
 	          </li>
-	          <li class="active-pro">
-	            <a href="#">
-	              <i class="nc-icon nc-diamond"></i>
-	              <p>Sign Out</p>
-	            </a>
-	          </li>
 	        </ul>
 	      </div>
 	 </div>

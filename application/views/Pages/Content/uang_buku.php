@@ -28,6 +28,46 @@
 						<button type="button" class="btn btn-primary">Cari</button>
 					</div>
 					</div>
+					
+					<!-- Button trigger modal -->
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+							Tambah
+						</button>
+
+					<!-- Modal -->
+							<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uang Buku</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+										</div>
+									<div class="modal-body">
+										<div class="form-row">
+					<div class="form-group col-md-2">
+					</div>
+					<div class="form-group col-md-8">
+						<label for="inputEmail4">NISN</label>
+						<input type="text" class="form-control" id="tanggal" placeholder="Masukkan Nomor Induk Siswa">
+						<label for="inputEmail4">Jumlah</label>
+						<input type="text" class="form-control" id="tanggal" placeholder="Masukkan Nama Siswa">
+						<label for="inputEmail4">Tanggal</label>
+						<input type="date" class="form-control" id="tanggal">
+						</br>
+					</div>
+					<div class="form-group col-md-2">
+					</div>
+					</div>
+									</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary">Save changes</button>
+							</div>
+									</div>
+								</div>
+							</div>
 				</div>
               <div class="card-body ">
 					<table class="table">
