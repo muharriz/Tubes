@@ -6,14 +6,14 @@
           <div class="col-md-12">
             <div class="card ">
               <div class="card-header ">
-                <h5 class="card-title"><center>Pembayaran Uang Spp</center></h5>
+                <h5 class="card-title"><center>Pembayaran Uang Buku</center></h5>
 				<div class="form-row">
 					<div class="form-group col-md-5">
 						<label for="inputEmail4">NIS</label>
-						<input type="email" class="form-control" id="nis" placeholder="Nomor Induk Siswa">
+						<input type="email" class="form-control" id="inputEmail4" placeholder="Nomor Induk Siswa">
 					</div>
 					<div class="form-group col-md-3">
-						<label for="inputPassword4">Bulan</label>
+						<label for="inputPassword4">Kelas</label>
 						<select class="custom-select" required>
 							<option value="">Pilih Kelas</option>
 							<option value="1">Tujuh</option>

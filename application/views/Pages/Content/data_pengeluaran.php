@@ -6,20 +6,13 @@
           <div class="col-md-12">
             <div class="card ">
               <div class="card-header ">
-                <h5 class="card-title"><center>Pembayaran Uang Spp</center></h5>
+                <h5 class="card-title"><center>Pengeluaran</center></h5>
 				<div class="form-row">
 					<div class="form-group col-md-5">
-						<label for="inputEmail4">NIS</label>
-						<input type="email" class="form-control" id="nis" placeholder="Nomor Induk Siswa">
+						<label for="inputEmail4">Tanggal</label>
+						<input type="date" class="form-control" id="tanggal" placeholder="Nomor Induk Siswa">
 					</div>
 					<div class="form-group col-md-3">
-						<label for="inputPassword4">Bulan</label>
-						<select class="custom-select" required>
-							<option value="">Pilih Kelas</option>
-							<option value="1">Tujuh</option>
-							<option value="2">Delapan</option>
-							<option value="3">Sembilan</option>
-						</select>
 					</div>
 					<div class="form-group col-md-2">
 					</div>
@@ -33,9 +26,9 @@
 					<table class="table">
 						<thead class="thead-dark">
 							<tr>
-								<th scope="col">#</th>
-								<th scope="col">First</th>
-								<th scope="col">Last</th>
+								<th scope="col">No</th>
+								<th scope="col">Deksripsi</th>
+								<th scope="col">Jumlah</th>
 								<th scope="col">Handle</th>
 							</tr>
 						</thead>

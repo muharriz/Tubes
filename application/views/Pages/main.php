@@ -32,7 +32,7 @@
   
 </div> -->
       <div class="content">
-          <?php $this->load->view("Pages/Content/uang_spp"); ?>
+          <?php $this->load->view("Pages/Content/daftar_siswa"); ?>
       </div>
       <footer class="footer footer-black  footer-white ">
         <div class="container-fluid">
