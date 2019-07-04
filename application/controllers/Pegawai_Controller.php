@@ -37,26 +37,26 @@ class Pegawai_Controller extends CI_Controller {
             $config['full_tag_open'] = '<div class="pagination">';
             $config['full_tag_close'] = '</div>';
              
-            $config['first_link'] = 'First Page';
+            $config['first_link'] = '&nbspHalaman Pertama&nbsp';
             $config['first_tag_open'] = '<span class="firstlink"></span>&nbsp <span>';
             $config['first_tag_close'] = '</span>';
              
-            $config['last_link'] = 'Last Page';
+            $config['last_link'] = '&nbspHalaman Terakhir&nbsp';
             $config['last_tag_open'] = '<span class="lastlink">';
             $config['last_tag_close'] = '</span>';
              
-            $config['next_link'] = 'Next Page';
+            $config['next_link'] = '&nbspHalaman Selanjutnya&nbsp';
             $config['next_tag_open'] = '<span class="nextlink">';
             $config['next_tag_close'] = '</span>';
  
-            $config['prev_link'] = 'Prev Page';
+            $config['prev_link'] = '&nbspHalaman Sebelumnya&nbsp';
             $config['prev_tag_open'] = '<span class="prevlink">';
             $config['prev_tag_close'] = '</span>';
  
-            $config['cur_tag_open'] = '<span class="curlink">';
+            $config['cur_tag_open'] = '&nbsp<span class="curlink">&nbsp';
             $config['cur_tag_close'] = '</span>';
  
-            $config['num_tag_open'] = '<span class="numlink">';
+            $config['num_tag_open'] = '&nbsp<span class="numlink">&nbsp';
             $config['num_tag_close'] = '</span>';		
 		
 		$this->pagination->initialize($config);
