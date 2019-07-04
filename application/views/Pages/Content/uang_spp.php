@@ -73,10 +73,9 @@
 					<table class="table">
 						<thead class="thead-dark">
 							<tr>
-								<th scope="col">#</th>
-								<th scope="col">First</th>
-								<th scope="col">Last</th>
-								<th scope="col">Handle</th>
+								<th scope="col">NIS</th>
+								<th scope="col">Nama Siswa</th>
+								<th scope="col">Jumlah SPP</th>
 							</tr>
 						</thead>
 						<tbody>

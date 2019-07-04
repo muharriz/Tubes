@@ -16,6 +16,7 @@
   <!-- CSS Files -->
   <link href="<?php echo base_url()?>assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="<?php echo base_url()?>assets/css/paper-dashboard.css?v=2.0.0" rel="stylesheet" />
+  <link href="<?php echo base_url()?>assets/tabulator/dist/css/tabulator.min.css" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="<?php echo base_url()?>assets/demo/demo.css" rel="stylesheet" />
 </head>
@@ -32,7 +33,12 @@
   
 </div> -->
       <div class="content">
-          <?php $this->load->view("Pages/Content/dashboard"); ?>
+          <!--Alert Jika username atau password salah-->
+          <?php if($this->session->flashdata('greet')){ ?>
+            <div class="alert alert-success"><?php echo $this->session->flashdata('greet');?></div>
+          <?php } ?>
+          <!--/Alert Jika username atau password salah-->
+          <?php $this->load->view('Pages/Content/'.$this->session->userdata('halaman')); ?>
       </div>
       <footer class="footer footer-black  footer-white ">
         <div class="container-fluid">
@@ -68,10 +74,8 @@
   <script src="<?php echo base_url()?>assets/js/core/popper.min.js"></script>
   <script src="<?php echo base_url()?>assets/js/core/bootstrap.min.js"></script>
   <script src="<?php echo base_url()?>assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Chart JS -->
-  <script src="<?php echo base_url()?>assets/js/plugins/chartjs.min.js"></script>
+  <!-- Tabulator JS -->
+  <script src="<?php echo base_url()?>assets/tabulator/dist/js/tabulator.min.js"></script>
   <!--  Notifications Plugin    -->
   <script src="<?php echo base_url()?>assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
@@ -84,6 +88,9 @@
       demo.initChartsPages();
     });
   </script>
+  <?php
+    $json = json_encode($data);
+  ?>
 </body>
 
 </html>

@@ -37,8 +37,8 @@
 						Login
 					</span>
 					<!--Alert Jika username atau password salah-->
-					<?php if($this->session->flashdata('eror_no_user')){ ?>
-						<div class="alert alert-danger"><?php echo $this->session->flashdata('eror_no_user');?></div>
+					<?php if($this->session->flashdata('error')){ ?>
+						<div class="alert alert-danger"><?php echo $this->session->flashdata('error');?></div>
 					<?php } ?>
 					<!--/Alert Jika username atau password salah-->
 					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">

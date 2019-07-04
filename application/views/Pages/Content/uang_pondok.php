@@ -73,33 +73,30 @@
 					<table class="table">
 						<thead class="thead-dark">
 							<tr>
-								<th scope="col">#</th>
-								<th scope="col">First</th>
-								<th scope="col">Last</th>
-								<th scope="col">Handle</th>
+								<th scope="col">NIS</th>
+								<th scope="col">Nama</th>
+								<th scope="col">Tahun</th>
+								<th scope="col">Bulan</th>
+								<th scope="col">Jumlah Tagihan</th>
+								<th scope="col">Status</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<th scope="row">1</th>
-									<td>Mark</td>
-									<td>Otto</td>
-									<td>@mdo</td>
-							</tr>
-							<tr>
-								<th scope="row">2</th>
-									<td>Jacob</td>
-									<td>Thornton</td>
-									<td>@fat</td>
-							</tr>
-							<tr>
-								<th scope="row">3</th>
-									<td>Larry</td>
-									<td>the Bird</td>
-									<td>@twitter</td>
-							</tr>
+							<?php 
+								foreach($data as $i){?>
+								 <tr>
+									<td><?php echo $i->nis; ?></td>
+									<td><?php echo $i->nama; ?></td>
+									<td><?php echo $i->tahun; ?></td>
+									<td><?php echo $i->bulan; ?></td>
+									<td><?php echo $i->jumlah; ?></td>
+									<td><?php echo $i->status; ?></td>
+								</tr>
+							<?php } ?>
+							
 						</tbody>
 					</table>
+					<?php $this->pagination->create_links();?>
               </div>
               <div class="card-footer ">
                 <hr>
