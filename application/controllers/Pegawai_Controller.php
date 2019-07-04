@@ -26,7 +26,7 @@ class Pegawai_Controller extends CI_Controller {
 		// ngambil record sekarang
 		$config['base_url'] = base_url().'index.php/Pegawai_Controller/uang_pondok';
 		$config['total_rows'] = $jumlah_baris->total;
-		$config['per_page'] = 2;
+		$config['per_page'] = 10;
 		$config["uri_segment"] = 3;
 		
 		//custom pagination
