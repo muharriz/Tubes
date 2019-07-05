@@ -68,19 +68,25 @@ class Pegawai_Controller extends CI_Controller {
 	}
 	public function uang_buku(){
 		$this->session->set_userdata('halaman','uang_buku');
+		$this->load->view('Pages/main');
 	}
 	public function uang_pembangunan(){
 		$this->session->set_userdata('halaman','uang_pembangunan');
+		$this->load->view('Pages/main');
 		
 	}
+	
 	public function uang_bimbel(){
 		$this->session->set_userdata('halaman','uang_bimbel');
+		$this->load->view('Pages/main');
 	}
 	public function input_pengeluaran(){
 		$this->session->set_userdata('halaman','isi_pengeluaran');
+		$this->load->view('Pages/main');
 	}
 	public function lihat_pengeluaran(){
 		$this->session->set_userdata('halaman','data_pengeluaran');
+		$this->load->view('Pages/main');
 	}
 	public function dashboard(){
 		$this->session->set_userdata('halaman','dashboard');

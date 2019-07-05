@@ -3,20 +3,30 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-4">
             <div class="card ">
               <div class="card-header ">
-                <h5 class="card-title">Users Behavior</h5>
-                <p class="card-category">24 Hours performance</p>
+				<center><img src="<?php echo base_url('assets/img/user1.png')?>" width="200px" height="200px">
+				<h5 class="card-title">User</h5>
+                <p class="card-category">12 User</p></center>
               </div>
-              <div class="card-body ">
-                <canvas id=chartHours width="400" height="100"></canvas>
+            </div>
+          </div>
+		  <div class="col-md-4">
+            <div class="card ">
+              <div class="card-header ">
+                <center><img src="<?php echo base_url('assets/img/guru.png')?>" width="200px" height="200px">
+				<h5 class="card-title">Guru</h5>
+                <p class="card-category">57 Guru</p></center>
               </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-history"></i> Updated 3 minutes ago
-                </div>
+            </div>
+          </div>
+		  <div class="col-md-4">
+            <div class="card ">
+              <div class="card-header ">
+                <center><img src="<?php echo base_url('assets/img/murid.png')?>" width="200px" height="200px">
+				<h5 class="card-title">Murid</h5>
+                <p class="card-category">351 Murid</p></center>
               </div>
             </div>
           </div>

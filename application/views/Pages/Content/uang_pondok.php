@@ -79,6 +79,7 @@
 								<th scope="col">Bulan</th>
 								<th scope="col">Jumlah Tagihan</th>
 								<th scope="col">Status</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -91,6 +92,7 @@
 									<td><?php echo $i->bulan; ?></td>
 									<td><?php echo $i->jumlah; ?></td>
 									<td><?php echo $i->status; ?></td>
+									<td><span class="btn btn-warning">Edit</span>&nbsp;<span class="btn btn-danger">Hapus</span></td>
 								</tr>
 							<?php } ?>
 							

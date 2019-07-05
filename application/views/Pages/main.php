@@ -88,9 +88,6 @@
       demo.initChartsPages();
     });
   </script>
-  <?php
-    $json = json_encode($data);
-  ?>
 </body>
 
 </html>
