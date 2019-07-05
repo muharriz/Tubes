@@ -92,4 +92,8 @@ class Pegawai_Controller extends CI_Controller {
 		$this->session->set_userdata('halaman','dashboard');
 		$this->load->view('Pages/main');	
 	}
+	public function daftar_siswa(){
+		$this->session->set_userdata('halaman','daftar_siswa');
+		$this->load->view('Pages/main');	
+	}
 }
