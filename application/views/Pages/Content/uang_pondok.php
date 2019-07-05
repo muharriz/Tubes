@@ -96,7 +96,12 @@
 							
 						</tbody>
 					</table>
-					<?php $this->pagination->create_links();?>
+					<center>
+					<?php if(isset($pagination)){
+						echo $pagination;
+					}
+						?>
+					</center>
               </div>
               <div class="card-footer ">
                 <hr>

@@ -21,17 +21,48 @@ class Pegawai_Controller extends CI_Controller {
 		$this->session->set_userdata('halaman','uang_pondok');
 
 		$jumlah_baris = $this->Pegawai_Model->jumlah_data_pembayaran_pondok();
-		$page = $this->uri->segment(3);
+		$page = ($this->uri->segment(3)) ? ($this->uri->segment(3) - 1) : 0;
 
-		$config['base_url'] = 'url';
+		// ngambil record sekarang
+		$config['base_url'] = base_url().'index.php/Pegawai_Controller/uang_pondok';
 		$config['total_rows'] = $jumlah_baris->total;
-		$config['per_page'] = 10;
+		$config['per_page'] = 2;
+		$config["uri_segment"] = 3;
+		
+		//custom pagination
+            $config['num_links'] = 2;
+            $config['use_page_numbers'] = TRUE;
+            $config['reuse_query_string'] = TRUE;
+             
+            $config['full_tag_open'] = '<div class="pagination">';
+            $config['full_tag_close'] = '</div>';
+             
+            $config['first_link'] = 'First Page';
+            $config['first_tag_open'] = '<span class="firstlink"></span>&nbsp <span>';
+            $config['first_tag_close'] = '</span>';
+             
+            $config['last_link'] = 'Last Page';
+            $config['last_tag_open'] = '<span class="lastlink">';
+            $config['last_tag_close'] = '</span>';
+             
+            $config['next_link'] = 'Next Page';
+            $config['next_tag_open'] = '<span class="nextlink">';
+            $config['next_tag_close'] = '</span>';
+ 
+            $config['prev_link'] = 'Prev Page';
+            $config['prev_tag_open'] = '<span class="prevlink">';
+            $config['prev_tag_close'] = '</span>';
+ 
+            $config['cur_tag_open'] = '<span class="curlink">';
+            $config['cur_tag_close'] = '</span>';
+ 
+            $config['num_tag_open'] = '<span class="numlink">';
+            $config['num_tag_close'] = '</span>';		
+		
 		$this->pagination->initialize($config);
-		echo $config['per_page']."<br>";
-		echo $page."<br>";
+		$data['pagination'] = $this->pagination->create_links();
 
 		$data['data'] = $this->Pegawai_Model->pembayaran_pondok($config['per_page'],$page);
-		var_dump($data);
 
 		$this->load->view('Pages/main',$data);
 	}

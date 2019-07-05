@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 04, 2019 at 03:11 AM
+-- Generation Time: Jul 05, 2019 at 06:04 PM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -515,7 +515,31 @@ CREATE TABLE `uang_pondok` (
 --
 
 INSERT INTO `uang_pondok` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun`, `bulan`, `status`) VALUES
-(1101, '1214001', 312, 2014, 6, 'Belum Lunas');
+(1101, '1214001', 312, 2014, 6, 'Belum Lunas'),
+(1102, '1214002', 312, 2014, 6, 'Belum Lunas'),
+(1103, '1214003', 312, 2014, 6, 'Belum Lunas'),
+(1104, '1214004', 312, 2014, 6, 'Belum Lunas'),
+(1105, '1214005', 312, 2014, 6, 'Belum Lunas'),
+(1106, '1214006', 312, 2014, 6, 'Belum Lunas'),
+(1107, '1214007', 312, 2014, 6, 'Belum Lunas'),
+(1108, '1214007', 312, 2014, 6, 'Belum Lunas'),
+(1109, '1214009', 312, 2014, 6, 'Belum Lunas'),
+(1110, '1214010', 312, 2014, 6, 'Belum Lunas'),
+(1111, '1214011', 312, 2014, 6, 'Belum Lunas'),
+(1112, '1214012', 312, 2014, 6, 'Belum Lunas'),
+(1113, '1214013', 312, 2014, 6, 'Belum Lunas'),
+(1114, '1214014', 312, 2014, 6, 'Belum Lunas'),
+(1115, '1214015', 312, 2014, 6, 'Belum Lunas'),
+(1116, '1214016', 312, 2014, 6, 'Belum Lunas'),
+(1117, '1214017', 312, 2014, 6, 'Belum Lunas'),
+(1118, '1214018', 312, 2014, 6, 'Belum Lunas'),
+(1119, '1214019', 312, 2014, 6, 'Belum Lunas'),
+(1120, '1214020', 312, 2014, 6, 'Belum Lunas'),
+(1121, '1214021', 312, 2014, 6, 'Belum Lunas'),
+(1122, '1214022', 312, 2014, 6, 'Belum Lunas'),
+(1123, '1214023', 312, 2014, 6, 'Belum Lunas'),
+(1124, '1214024', 312, 2014, 6, 'Belum Lunas'),
+(1125, '1214025', 312, 2014, 6, 'Belum Lunas');
 
 -- --------------------------------------------------------
 
@@ -536,7 +560,31 @@ CREATE TABLE `uang_spp` (
 --
 
 INSERT INTO `uang_spp` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun_ajaran`, `semester`) VALUES
-(1101, '1214001', 311, '2014/2015', 'Ganjil');
+(1101, '1214001', 311, '2014/2015', 'Ganjil'),
+(1102, '1214002', 311, '2014/2015', 'Ganjil'),
+(1103, '1214003', 311, '2014/2015', 'Ganjil'),
+(1104, '1214004', 311, '2014/2015', 'Ganjil'),
+(1105, '1214005', 311, '2014/2015', 'Ganjil'),
+(1106, '1214006', 311, '2014/2015', 'Ganjil'),
+(1107, '1214007', 311, '2014/2015', 'Ganjil'),
+(1108, '1214008', 311, '2014/2015', 'Ganjil'),
+(1109, '1214009', 311, '2014/2015', 'Ganjil'),
+(1110, '1214010', 311, '2014/2015', 'Ganjil'),
+(1111, '1214011', 311, '2014/2015', 'Ganjil'),
+(1112, '1214012', 311, '2014/2015', 'Ganjil'),
+(1113, '1214013', 311, '2014/2015', 'Ganjil'),
+(1114, '1214014', 311, '2014/2015', 'Ganjil'),
+(1115, '1214015', 311, '2014/2015', 'Ganjil'),
+(1116, '1214016', 311, '2014/2015', 'Ganjil'),
+(1117, '1214017', 311, '2014/2015', 'Ganjil'),
+(1118, '1214018', 311, '2014/2015', 'Ganjil'),
+(1119, '1214019', 311, '2014/2015', 'Ganjil'),
+(1120, '1214020', 311, '2014/2015', 'Ganjil'),
+(1121, '1214021', 311, '2014/2015', 'Ganjil'),
+(1122, '1214022', 311, '2014/2015', 'Ganjil'),
+(1123, '1214023', 311, '2014/2015', 'Ganjil'),
+(1124, '1214024', 311, '2014/2015', 'Ganjil'),
+(1125, '1214025', 311, '2014/2015', 'Ganjil');
 
 -- --------------------------------------------------------
 
@@ -721,13 +769,13 @@ ALTER TABLE `uang_pembangunan`
 -- AUTO_INCREMENT for table `uang_pondok`
 --
 ALTER TABLE `uang_pondok`
-  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1102;
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1126;
 
 --
 -- AUTO_INCREMENT for table `uang_spp`
 --
 ALTER TABLE `uang_spp`
-  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1102;
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1126;
 
 --
 -- Constraints for dumped tables
