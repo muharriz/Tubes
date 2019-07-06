@@ -21,7 +21,7 @@
 	      <div class="sidebar-wrapper">
 	        <ul class="nav">
 	          <li class="active ">
-	            <a href="./dashboard.html">
+	            <a href="<?php echo base_url('index.php/Pegawai_Controller/dashboard')?>">
 				  <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="nc-icon nc-bank"></i>Pemasukan</a>
 					<ul class="collapse list-unstyled" id="pageSubmenu">
 						<li>

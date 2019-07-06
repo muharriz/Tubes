@@ -15,4 +15,16 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->query("Select jumlah_data_pembayaran_pondok() as total");
 		return $result->row();
 	}
+	public function hapus_uang_pondok($id){
+		$result = $this->db->query("call hapus_uang_pondok('".$id."')");
+		return $result;
+	}
+	public function tambah_uang_pondok($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function bayar_uang_pondok($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
 }

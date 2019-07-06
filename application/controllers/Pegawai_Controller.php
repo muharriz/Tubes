@@ -66,6 +66,82 @@ class Pegawai_Controller extends CI_Controller {
 
 		$this->load->view('Pages/main',$data);
 	}
+	public function hapus_uang_pondok($id){
+		if($this->Pegawai_Model->hapus_uang_pondok($id)){
+			$this->session->set_flashdata('success', 'Data Berhasil Dihapus !');
+			redirect(base_url('index.php/Pegawai_Controller/uang_pondok'));
+		}
+	}
+	public function tambah_uang_pondok(){
+
+		$this->form_validation->set_rules(
+											'nis','NIS','required|min_length[7]|max_length[7]',
+											array(
+													'required' => 'Anda belum mengisi %s, harap periksa kembali!'
+											)
+
+		);
+		$this->form_validation->set_rules(
+											'tahun','Tahun','required|min_length[4]|max_length[4]',
+											array(
+													'required' => 'Anda belum mengisi %s, harap periksa kembali!'
+											)
+
+		);
+		if($this->form_validation->run() == FALSE){
+			$this->session->set_flashdata('error','Data gagal dimasukkan, harap periksa kembali data anda!');
+			redirect(base_url('index.php/Pegawai_Controller/uang_pondok'));
+		}
+		else{
+
+			$data = array(
+							'NIS' => $this->input->post('nis'),
+							'tahun' => $this->input->post('tahun'),
+							'bulan' => $this->input->post('bulan')
+			);
+
+			$status = $this->Pegawai_Model->tambah_uang_pondok($data,'uang_pondok');
+
+			if($status){
+				$this->session->set_flashdata('success','Data berhasil ditambah!');
+				redirect(base_url('index.php/Pegawai_Controller/uang_pondok'));
+			}
+			else{
+				$this->session->set_flashdata('error','Data gagal dimasukkan, harap periksa kembali data anda!');
+				redirect(base_url('index.php/Pegawai_Controller/uang_pondok'));
+			}
+
+		}
+	}
+	public function halaman_bayar_uang_pondok($id){
+		$this->session->set_flashdata('halaman','pembayaran_pondok');
+		$data['id'] = $id;
+		$this->load->view('Pages/main',$data);
+	}
+	public function bayar_uang_pondok($id){
+		$this->session->set_flashdata('halaman','pembayaran_pondok');
+
+
+		$data = array(
+						'pembayaran_id' => $id,
+						'jumlah' => $this->input->post('jumlah'),
+						'tgl_pembayaran' => $this->input->post('tanggal'),
+						'pegawai_id' => $this->session->userdata('pegawai_id'),
+						'potongan' => $this->input->post('potongan')
+		);
+
+		$status = $this->Pegawai_Model->bayar_uang_pondok($data,'pembayaran_pondok');
+
+		if($status){
+			$this->session->set_flashdata('success','Pembayaran Berhasil!');
+			redirect(base_url('index.php/Pegawai_Controller/uang_pondok'));
+		}
+		else{
+			$this->session->set_flashdata('error','Pembayaran gagal, harap periksa kembali data anda!');
+			redirect(base_url('index.php/Pegawai_Controller/pembayaran_pondok'));
+		}
+
+	}
 	public function uang_buku(){
 		$this->session->set_userdata('halaman','uang_buku');
 		$this->load->view('Pages/main');

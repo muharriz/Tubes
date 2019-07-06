@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 05, 2019 at 06:04 PM
+-- Generation Time: Jul 06, 2019 at 08:52 AM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -23,6 +23,14 @@ SET time_zone = "+00:00";
 --
 
 DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `hapus_uang_pondok` (IN `id` INT(11))  begin
+	delete from pembayaran_pondok where pembayaran_id = id;
+	delete from uang_pondok where pembayaran_id = id;
+end$$
+
 --
 -- Functions
 --
@@ -165,7 +173,33 @@ CREATE TABLE `pembayaran_pondok` (
 --
 
 INSERT INTO `pembayaran_pondok` (`pembayaran_id`, `jumlah`, `tgl_pembayaran`, `pegawai_id`, `potongan`) VALUES
-(1101, 250000, '2019-07-24', 100004, 0);
+(1127, 250000, '2019-07-06', 100001, 50000),
+(1127, 0, '2019-07-06', 100001, 0),
+(1107, 300000, '2019-07-06', 100001, 0),
+(1107, 250000, '2019-07-06', 100001, 50000);
+
+--
+-- Triggers `pembayaran_pondok`
+--
+DELIMITER $$
+CREATE TRIGGER `cek_lunas` BEFORE INSERT ON `pembayaran_pondok` FOR EACH ROW begin 
+	declare total_yg_sudah_dibayar int(11);
+    declare total_potongan int(11);
+    declare total int(11);
+    declare tagihan int(11);
+    select jumlah into tagihan from v_lihatpembayaranpondok where pembayaran_id = new.pembayaran_id;
+    select sum(jumlah) into total_yg_sudah_dibayar from pembayaran_pondok where pembayaran_id = new.pembayaran_id;
+    select sum(potongan) into total_potongan from pembayaran_pondok where pembayaran_id = new.pembayaran_id;
+    set total  = total_yg_sudah_dibayar + total_potongan;
+    set total = total + new.jumlah;
+    set total = total + new.potongan;
+    
+    if(total >= tagihan) THEN
+      update uang_pondok set status='lunas' where pembayaran_id = new.pembayaran_id;
+    end IF;
+end
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -504,10 +538,10 @@ CREATE TABLE `uang_pembangunan` (
 CREATE TABLE `uang_pondok` (
   `pembayaran_id` int(11) NOT NULL,
   `NIS` varchar(16) NOT NULL,
-  `tagihan_id` int(11) NOT NULL,
+  `tagihan_id` int(11) NOT NULL DEFAULT '312',
   `tahun` int(5) NOT NULL,
   `bulan` int(5) NOT NULL,
-  `status` enum('Lunas','Belum Lunas') NOT NULL
+  `status` enum('Lunas','Belum Lunas') NOT NULL DEFAULT 'Belum Lunas'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -515,14 +549,7 @@ CREATE TABLE `uang_pondok` (
 --
 
 INSERT INTO `uang_pondok` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun`, `bulan`, `status`) VALUES
-(1101, '1214001', 312, 2014, 6, 'Belum Lunas'),
-(1102, '1214002', 312, 2014, 6, 'Belum Lunas'),
-(1103, '1214003', 312, 2014, 6, 'Belum Lunas'),
-(1104, '1214004', 312, 2014, 6, 'Belum Lunas'),
-(1105, '1214005', 312, 2014, 6, 'Belum Lunas'),
-(1106, '1214006', 312, 2014, 6, 'Belum Lunas'),
-(1107, '1214007', 312, 2014, 6, 'Belum Lunas'),
-(1108, '1214007', 312, 2014, 6, 'Belum Lunas'),
+(1107, '1214007', 312, 2014, 6, 'Lunas'),
 (1109, '1214009', 312, 2014, 6, 'Belum Lunas'),
 (1110, '1214010', 312, 2014, 6, 'Belum Lunas'),
 (1111, '1214011', 312, 2014, 6, 'Belum Lunas'),
@@ -539,7 +566,8 @@ INSERT INTO `uang_pondok` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun`, `bulan
 (1122, '1214022', 312, 2014, 6, 'Belum Lunas'),
 (1123, '1214023', 312, 2014, 6, 'Belum Lunas'),
 (1124, '1214024', 312, 2014, 6, 'Belum Lunas'),
-(1125, '1214025', 312, 2014, 6, 'Belum Lunas');
+(1125, '1214025', 312, 2014, 6, 'Belum Lunas'),
+(1127, '1214001', 312, 2014, 6, 'Lunas');
 
 -- --------------------------------------------------------
 
@@ -593,7 +621,8 @@ INSERT INTO `uang_spp` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun_ajaran`, `s
 -- (See below for the actual view)
 --
 CREATE TABLE `v_lihatpembayaranpondok` (
-`nis` varchar(16)
+`pembayaran_id` int(11)
+,`NIS` varchar(16)
 ,`nama` varchar(60)
 ,`tahun` int(5)
 ,`bulan` int(5)
@@ -608,7 +637,7 @@ CREATE TABLE `v_lihatpembayaranpondok` (
 --
 DROP TABLE IF EXISTS `v_lihatpembayaranpondok`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranpondok`  AS  select `siswa`.`NIS` AS `nis`,`siswa`.`nama` AS `nama`,`uang_pondok`.`tahun` AS `tahun`,`uang_pondok`.`bulan` AS `bulan`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_pondok`.`status` AS `status` from ((`siswa` join `jenis_tagihan`) join `uang_pondok` on(((`siswa`.`NIS` = `uang_pondok`.`NIS`) and (`uang_pondok`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranpondok`  AS  select `uang_pondok`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_pondok`.`tahun` AS `tahun`,`uang_pondok`.`bulan` AS `bulan`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_pondok`.`status` AS `status` from ((`uang_pondok` join `siswa`) join `jenis_tagihan` on(((`uang_pondok`.`NIS` = `siswa`.`NIS`) and (`uang_pondok`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `siswa`.`NIS` ;
 
 --
 -- Indexes for dumped tables
@@ -769,7 +798,7 @@ ALTER TABLE `uang_pembangunan`
 -- AUTO_INCREMENT for table `uang_pondok`
 --
 ALTER TABLE `uang_pondok`
-  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1126;
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1128;
 
 --
 -- AUTO_INCREMENT for table `uang_spp`
