@@ -52,7 +52,7 @@ class Main_Controller extends CI_Controller {
 			redirect(base_url());
 	}
 
-	//fungsi untuk reload page sesuai session page
+	//fungsi untuk cek apakah user telah login
 	public function cek_login(){
 		if(is_null($this->session->userdata('pegawai_id'))){
 			$this->session->set_flashdata('error','Maaf, Anda harus login terlebih dahulu!');

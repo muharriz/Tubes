@@ -27,4 +27,12 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->insert($table,$data);
 		return $result;
 	}
+	public function ambil_data_pondok($data){
+		$result = $this->db->get('v_lihatpembayaranpondok',$data);
+		return $result->row();
+	}
+	public function update_uang_pondok($data){
+		$result = $this->db->query("update uang_pondok set tahun='".$data['tahun']."',bulan='".$data['bulan']."',status='".$data['status']."' where pembayaran_id = '".$data['id']."'");
+		return $result;
+	}
 }
