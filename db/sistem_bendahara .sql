@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 06, 2019 at 08:52 AM
+-- Generation Time: Jul 09, 2019 at 04:12 PM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -26,6 +26,18 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `hapus_uang_bimbel` (IN `id` INT(11))  NO SQL
+begin
+	delete from pembayaran_bimbel where pembayaran_id = id;
+	delete from uang_bimbel where pembayaran_id = id;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `hapus_uang_pembangunan` (IN `id` INT(11))  NO SQL
+begin
+	delete from pembayaran_pembangunan where pembayaran_id = id;
+	delete from uang_pembangunan where pembayaran_id = id;
+end$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `hapus_uang_pondok` (IN `id` INT(11))  begin
 	delete from pembayaran_pondok where pembayaran_id = id;
 	delete from uang_pondok where pembayaran_id = id;
@@ -38,6 +50,20 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `cek_user` (`nip` VARCHAR(50), `passw
 	declare result int(5);
     select count(pegawai_id) into result from pegawai where pegawai_id LIKE nip and pegawai_password = password;
     return result;
+end$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `jumlah_data_pembayaran_bimbel` () RETURNS INT(11) NO SQL
+BEGIN
+	declare jumlah_data int(11);
+    select count(*) into jumlah_data from uang_bimbel;
+    return jumlah_data;
+end$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `jumlah_data_pembayaran_pembangunan` () RETURNS INT(11) NO SQL
+BEGIN
+	declare jumlah_data int(11);
+    select count(*) into jumlah_data from uang_pembangunan;
+    return jumlah_data;
 end$$
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `jumlah_data_pembayaran_pondok` () RETURNS INT(11) BEGIN
@@ -108,7 +134,8 @@ CREATE TABLE `pembayaran_bimbel` (
   `pembayaran_id` int(11) NOT NULL,
   `jumlah` int(11) NOT NULL,
   `tgl_pembayaran` date NOT NULL,
-  `pegawai_id` int(11) NOT NULL
+  `pegawai_id` int(11) NOT NULL,
+  `potongan` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -138,7 +165,8 @@ CREATE TABLE `pembayaran_buku` (
   `pembayaran_id` int(11) NOT NULL,
   `jumlah` int(11) NOT NULL,
   `tgl_pembayaran` date NOT NULL,
-  `pegawai_id` int(11) NOT NULL
+  `pegawai_id` int(11) NOT NULL,
+  `potongan` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -151,8 +179,16 @@ CREATE TABLE `pembayaran_pembangunan` (
   `pembayaran_id` int(11) NOT NULL,
   `jumlah` int(11) NOT NULL,
   `tgl_pembayaran` date NOT NULL,
-  `pegawai_id` int(11) NOT NULL
+  `pegawai_id` int(11) NOT NULL,
+  `potongan` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pembayaran_pembangunan`
+--
+
+INSERT INTO `pembayaran_pembangunan` (`pembayaran_id`, `jumlah`, `tgl_pembayaran`, `pegawai_id`, `potongan`) VALUES
+(2, 0, '0000-00-00', 100001, 0);
 
 -- --------------------------------------------------------
 
@@ -235,6 +271,13 @@ CREATE TABLE `pengeluaran` (
   `tgl_dipakai` date NOT NULL,
   `keterangan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pengeluaran`
+--
+
+INSERT INTO `pengeluaran` (`pengeluaran_id`, `jumlah`, `tgl_dipakai`, `keterangan`) VALUES
+(1, 350000, '2016-08-17', 'Pembelian Bangku');
 
 -- --------------------------------------------------------
 
@@ -484,6 +527,32 @@ CREATE TABLE `uang_bimbel` (
   `status` enum('Lunas','Belum Lunas') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `uang_bimbel`
+--
+
+INSERT INTO `uang_bimbel` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun_ajaran`, `semester`, `status`) VALUES
+(2, '1214002', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(3, '1214003', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(4, '1214004', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(5, '1214005', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(6, '1214006', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(7, '1214007', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(8, '1214008', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(9, '1214009', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(10, '1214010', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(11, '1214011', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(12, '1214012', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(13, '1214013', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(14, '1214014', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(15, '1214015', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(16, '1214016', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(17, '1214017', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(18, '1214018', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(19, '1214019', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(20, '1214020', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(21, '1214021', 109, '2014/2015', 'Ganjil', 'Belum Lunas');
+
 -- --------------------------------------------------------
 
 --
@@ -498,6 +567,32 @@ CREATE TABLE `uang_buku` (
   `semester` enum('Ganjil','Genap') NOT NULL,
   `status` enum('Lunas','Belum Lunas') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `uang_buku`
+--
+
+INSERT INTO `uang_buku` (`pembayaran_id`, `NIS`, `jumlah`, `tahun_ajaran`, `semester`, `status`) VALUES
+(1, '1214001', 720000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(2, '1214002', 350000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(3, '1214003', 300000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(4, '1214004', 100000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(5, '1214005', 300000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(6, '1214006', 600000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(7, '1214007', 100000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(8, '1214008', 460000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(9, '1214009', 440000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(10, '1214010', 350000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(11, '1214011', 500000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(12, '1214012', 660000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(13, '1214013', 370000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(14, '1214014', 720000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(15, '1214015', 440000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(16, '1214016', 660000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(17, '1214017', 470000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(18, '1214018', 480000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(19, '1214019', 360000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(20, '1214020', 740000, '2014/2015', 'Ganjil', 'Belum Lunas');
 
 -- --------------------------------------------------------
 
@@ -514,6 +609,27 @@ CREATE TABLE `uang_infaq` (
   `keterangan` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `uang_infaq`
+--
+
+INSERT INTO `uang_infaq` (`donatur_id`, `nama_lengkap`, `jumlah`, `tanggal_diterima`, `pegawai_id`, `keterangan`) VALUES
+(1, 'Udin Salahudin', 1000000, '2019-07-09', 100001, 'Infaq Rutin Bapak Salahudin'),
+(2, 'Rincoe Manto', 500000, '2019-07-01', 100001, 'Infaq Dari Bapak Manto'),
+(3, 'Reza Arman', 50000, '2019-06-11', 100001, 'Infaq Reza'),
+(4, 'Budi Boy', 100000, '2019-07-03', 100001, 'Infaq Boy'),
+(5, 'Iwan Marwan', 300000, '2019-07-03', 100001, 'Infaq Marwan'),
+(6, 'Aisyah Fatimah', 500000, '2019-07-02', 100001, 'Infaq Ibu Aisyah'),
+(7, 'Rizka Afkha', 100000, '2019-07-02', 100001, 'Infaq Rizka'),
+(8, 'Tasya Solihudin', 2000000, '2019-07-01', 100001, 'Infaq Tasya'),
+(9, 'Faturrahman ', 350000, '2019-07-01', 100001, 'Infaq Fathurrahman'),
+(10, 'Sakijo Jojo', 50000, '2019-07-08', 100001, 'Infaq Sakijo'),
+(11, 'Fateh Ali', 350000, '2019-07-03', 100001, 'Infaq Fateh'),
+(12, 'Muhammad Imam', 100000, '2019-07-03', 100001, 'Infaq Imam'),
+(13, 'Yusuf Faturrahman', 1000000, '2019-07-03', 100001, 'Infaq Yusuf'),
+(14, 'Ananda Daulay', 100000, '2019-07-09', 100001, 'Infaq Daulay'),
+(15, 'Rafi Rasy', 100000, '2019-07-06', 100001, 'Infaq Rasi');
+
 -- --------------------------------------------------------
 
 --
@@ -528,6 +644,33 @@ CREATE TABLE `uang_pembangunan` (
   `semester` enum('Ganjil','Genap') NOT NULL,
   `status` enum('Lunas','Belum Lunas') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `uang_pembangunan`
+--
+
+INSERT INTO `uang_pembangunan` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun_ajaran`, `semester`, `status`) VALUES
+(2, '1214002', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(3, '1214003', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(4, '1214004', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(5, '1214005', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(6, '1214006', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(7, '1214007', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(8, '1214008', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(9, '1214009', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(10, '1214010', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(11, '1214011', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(12, '1214012', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(13, '1214013', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(14, '1214014', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(15, '1214015', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(16, '1214016', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(17, '1214017', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(18, '1214018', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(19, '1214019', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(20, '1214020', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(21, '1214021', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(22, '1214022', 310, '2014/2015', 'Ganjil', 'Belum Lunas');
 
 -- --------------------------------------------------------
 
@@ -617,6 +760,38 @@ INSERT INTO `uang_spp` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun_ajaran`, `s
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `v_lihatpembayaranbimbel`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_lihatpembayaranbimbel` (
+`pembayaran_id` int(11)
+,`NIS` varchar(16)
+,`nama` varchar(60)
+,`tahun_ajaran` varchar(9)
+,`semester` enum('Genap','Ganjil')
+,`jumlah` int(11)
+,`status` enum('Lunas','Belum Lunas')
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_lihatpembayaranpembangunan`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_lihatpembayaranpembangunan` (
+`pembayaran_id` int(11)
+,`NIS` varchar(16)
+,`nama` varchar(60)
+,`tahun_ajaran` varchar(9)
+,`semester` enum('Ganjil','Genap')
+,`jumlah` int(11)
+,`status` enum('Lunas','Belum Lunas')
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `v_lihatpembayaranpondok`
 -- (See below for the actual view)
 --
@@ -629,6 +804,24 @@ CREATE TABLE `v_lihatpembayaranpondok` (
 ,`jumlah` int(11)
 ,`status` enum('Lunas','Belum Lunas')
 );
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_lihatpembayaranbimbel`
+--
+DROP TABLE IF EXISTS `v_lihatpembayaranbimbel`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranbimbel`  AS  select `uang_bimbel`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_bimbel`.`tahun_ajaran` AS `tahun_ajaran`,`uang_bimbel`.`semester` AS `semester`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_bimbel`.`status` AS `status` from ((`uang_bimbel` join `siswa`) join `jenis_tagihan` on(((`uang_bimbel`.`NIS` = `siswa`.`NIS`) and (`uang_bimbel`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `siswa`.`NIS` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_lihatpembayaranpembangunan`
+--
+DROP TABLE IF EXISTS `v_lihatpembayaranpembangunan`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranpembangunan`  AS  select `uang_pembangunan`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_pembangunan`.`tahun_ajaran` AS `tahun_ajaran`,`uang_pembangunan`.`semester` AS `semester`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_pembangunan`.`status` AS `status` from ((`uang_pembangunan` join `siswa`) join `jenis_tagihan` on(((`uang_pembangunan`.`NIS` = `siswa`.`NIS`) and (`uang_pembangunan`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `siswa`.`NIS` ;
 
 -- --------------------------------------------------------
 
@@ -768,31 +961,31 @@ ALTER TABLE `pegawai`
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `pengeluaran_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pengeluaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `uang_bimbel`
 --
 ALTER TABLE `uang_bimbel`
-  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `uang_buku`
 --
 ALTER TABLE `uang_buku`
-  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `uang_infaq`
 --
 ALTER TABLE `uang_infaq`
-  MODIFY `donatur_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `donatur_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `uang_pembangunan`
 --
 ALTER TABLE `uang_pembangunan`
-  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `uang_pondok`

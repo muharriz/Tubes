@@ -27,6 +27,7 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->insert($table,$data);
 		return $result;
 	}
+<<<<<<< HEAD
 	public function ambil_data_pondok($data){
 		$result = $this->db->get('v_lihatpembayaranpondok',$data);
 		return $result->row();
@@ -35,4 +36,58 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->query("update uang_pondok set tahun='".$data['tahun']."',bulan='".$data['bulan']."',status='".$data['status']."' where pembayaran_id = '".$data['id']."'");
 		return $result;
 	}
+=======
+	public function pembayaran_pembangunan($number,$offset){
+		$result = $this->db->get("v_lihatpembayaranpembangunan",$number,$offset);
+		return $result->result();
+	}
+	public function jumlah_data_pembayaran_pembangunan(){
+		$result = $this->db->query("Select jumlah_data_pembayaran_pembangunan() as total");
+		return $result->row();
+	}
+	public function hapus_uang_pembangunan($id){
+		$result = $this->db->query("call hapus_uang_pembangunan('".$id."')");
+		return $result;
+	}
+	public function tambah_uang_pembangunan($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function bayar_uang_pembangunan($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function pembayaran_bimbel($number,$offset){
+		$result = $this->db->get("v_lihatpembayaranbimbel",$number,$offset);
+		return $result->result();
+	}
+	public function jumlah_data_pembayaran_bimbel(){
+		$result = $this->db->query("Select jumlah_data_pembayaran_bimbel() as total");
+		return $result->row();
+	}
+	public function hapus_uang_bimbel($id){
+		$result = $this->db->query("call hapus_uang_bimbel('".$id."')");
+		return $result;
+	}
+	public function tambah_uang_bimbel($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function bayar_uang_bimbel($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function tambah_siswa($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function tambah_pengeluaran($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function jumlah_data_pengeluaran(){
+		$result = $this->db->query("Select jumlah_data_pembayaran_bimbel() as total");
+		return $result->row();
+	}
+>>>>>>> 023f02d0a469f1aa50792002b0ad49bded1ddc47
 }

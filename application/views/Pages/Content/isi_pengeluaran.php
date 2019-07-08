@@ -11,14 +11,16 @@
 					<div class="form-group col-md-4">
 					</div>
 					<div class="form-group col-md-4">
-						<label for="inputEmail4">Deksripsi</label>
-						<input type="text" class="form-control" id="tanggal" placeholder="Masukkan Deksripsi">
+					<form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/tambah_pengeluaran')?>">
 						<label for="inputEmail4">Jumlah</label>
-						<input type="text" class="form-control" id="tanggal" placeholder="Masukkan Jumlah">
+						<input type="number" class="form-control" name="jumlah" placeholder="Masukkan Jumlah">
 						<label for="inputEmail4">Tanggal</label>
-						<input type="date" class="form-control" id="tanggal" placeholder="Masukkan Alamat">
+						<input type="date" class="form-control" name="tgl_dipakai" placeholder="Masukkan Tanggal">
+						<label for="inputEmail4">Deksripsi</label>
+						<input type="text" class="form-control" name="keterangan" placeholder="Masukkan Deksripsi">
 						</br>
-						<div class="col-md-4 offset-md-8"><button type="button" class="btn btn-primary">Submit</button></div>
+						<div class="col-md-4 offset-md-8"><button type="submit" class="btn btn-primary">Submit</button></div>
+						</form>
 					</div>
 					<div class="form-group col-md-4">
 					</div>
