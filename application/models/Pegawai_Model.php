@@ -67,4 +67,16 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->insert($table,$data);
 		return $result;
 	}
+	public function tambah_siswa($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function tambah_pengeluaran($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function jumlah_data_pengeluaran(){
+		$result = $this->db->query("Select jumlah_data_pembayaran_bimbel() as total");
+		return $result->row();
+	}
 }

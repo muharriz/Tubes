@@ -363,6 +363,68 @@ class Pegawai_Controller extends CI_Controller {
 
 		}
 	}
+	public function tambah_siswa(){
+
+		$this->form_validation->set_rules(
+											'nis','NIS','required|min_length[7]|max_length[7]',
+											array(
+													'required' => 'Anda belum mengisi %s, harap periksa kembali!'
+											)
+
+		);
+		if($this->form_validation->run() == FALSE){
+			$this->session->set_flashdata('error','Data gagal dimasukkan, harap periksa kembali data anda!');
+			redirect(base_url('index.php/Pegawai_Controller/daftar_siswa'));
+		}
+		else{
+
+			$data = array(
+							'NIS' => $this->input->post('nis'),
+							'nama' => $this->input->post('nama'),
+							'jenis_kelamin' => $this->input->post('jenis_kelamin'),
+							'alamat' => $this->input->post('alamat'),
+							'tgl_masuk' => $this->input->post('tanggal'),
+							'status' => $this->input->post('status')
+							
+			);
+
+			$status = $this->Pegawai_Model->tambah_siswa($data,'siswa');
+
+			if($status){
+				$this->session->set_flashdata('success','Data berhasil ditambah!');
+				redirect(base_url('index.php/Pegawai_Controller/daftar_siswa'));
+			}
+			else{
+				$this->session->set_flashdata('error','Data gagal dimasukkan, harap periksa kembali data anda!');
+				redirect(base_url('index.php/Pegawai_Controller/daftar_siswa'));
+			}
+
+		}
+	}
+	
+	public function tambah_pengeluaran(){
+
+		
+
+			$data = array(
+							'jumlah' => $this->input->post('jumlah'),
+							'tgl_dipakai' => $this->input->post('tgl_dipakai'),
+							'keterangan' => $this->input->post('keterangan')
+			);
+
+			$status = $this->Pegawai_Model->tambah_pengeluaran($data,'pengeluaran');
+
+			if($status){
+				$this->session->set_flashdata('success','Data berhasil ditambah!');
+				redirect(base_url('index.php/Pegawai_Controller/input_pengeluaran'));
+			}
+			else{
+				$this->session->set_flashdata('error','Data gagal dimasukkan, harap periksa kembali data anda!');
+				redirect(base_url('index.php/Pegawai_Controller/input_pengeluaran'));
+			}
+
+		
+	}
 	public function halaman_bayar_uang_bimbel($id){
 		$this->session->set_flashdata('halaman','pembayaran_bimbel');
 		$data['id'] = $id;
