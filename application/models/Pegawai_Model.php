@@ -27,7 +27,7 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->insert($table,$data);
 		return $result;
 	}
-<<<<<<< HEAD
+
 	public function ambil_data_pondok($data){
 		$result = $this->db->get('v_lihatpembayaranpondok',$data);
 		return $result->row();
@@ -36,7 +36,6 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->query("update uang_pondok set tahun='".$data['tahun']."',bulan='".$data['bulan']."',status='".$data['status']."' where pembayaran_id = '".$data['id']."'");
 		return $result;
 	}
-=======
 	public function pembayaran_pembangunan($number,$offset){
 		$result = $this->db->get("v_lihatpembayaranpembangunan",$number,$offset);
 		return $result->result();
@@ -89,5 +88,5 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->query("Select jumlah_data_pembayaran_bimbel() as total");
 		return $result->row();
 	}
->>>>>>> 023f02d0a469f1aa50792002b0ad49bded1ddc47
+
 }

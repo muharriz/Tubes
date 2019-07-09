@@ -153,7 +153,6 @@ class Pegawai_Controller extends CI_Controller {
 		}
 
 	}
-<<<<<<< HEAD
 
 	// Fungsi untuk membuka halaman edit uang pondok
 	public function edit_uang_pondok($id){
@@ -213,8 +212,6 @@ class Pegawai_Controller extends CI_Controller {
 	}
 
 	// KUMPULAN FUNGSI UNTUK FITUR UANG PEMBANGUNAN
-=======
->>>>>>> 023f02d0a469f1aa50792002b0ad49bded1ddc47
 	public function uang_pembangunan(){
 		$this->session->set_userdata('halaman','uang_pembangunan');
 
@@ -340,11 +337,10 @@ class Pegawai_Controller extends CI_Controller {
 		}
 
 	}
-<<<<<<< HEAD
+
 	
 	// KUMPULAN FUNGSI UNTUK FITUR UANG BIMBEL
-=======
->>>>>>> 023f02d0a469f1aa50792002b0ad49bded1ddc47
+
 	public function uang_bimbel(){
 		$this->session->set_userdata('halaman','uang_bimbel');
 
@@ -532,16 +528,9 @@ class Pegawai_Controller extends CI_Controller {
 		}
 
 	}
-	public function uang_buku(){
-		$this->session->set_userdata('halaman','uang_buku');
-		$this->load->view('Pages/main');
-	}
-<<<<<<< HEAD
 
 	// KUMPULAN FUNGSI UNTUK FITUR UANG BUKU
-=======
-	
->>>>>>> 023f02d0a469f1aa50792002b0ad49bded1ddc47
+
 	public function input_pengeluaran(){
 		$this->session->set_userdata('halaman','isi_pengeluaran');
 		$this->load->view('Pages/main');
