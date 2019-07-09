@@ -39,7 +39,7 @@
 								<div class="modal-dialog" role="document">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uang Buku</h5>
+											<h5 class="modal-title" id="exampleModalLabel">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uang Pembangunan</h5>
 												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 													<span aria-hidden="true">&times;</span>
 												</button>
@@ -49,12 +49,26 @@
 					<div class="form-group col-md-2">
 					</div>
 					<div class="form-group col-md-8">
-						<label for="inputEmail4">NISN</label>
-						<input type="text" class="form-control" id="tanggal" placeholder="Masukkan Nomor Induk Siswa">
-						<label for="inputEmail4">Jumlah</label>
-						<input type="text" class="form-control" id="tanggal" placeholder="Masukkan Nama Siswa">
-						<label for="inputEmail4">Tanggal</label>
-						<input type="date" class="form-control" id="tanggal">
+					<form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/tambah_uang_buku')?>">
+						<label for="inputEmail4">NIS</label>
+						<input type="number" class="form-control" name="nis" placeholder="Input Nomor Induk Siswa">
+						<label for="inputEmail4">Bulan</label>
+					<select class="form-control" name="bulan">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+					</select>
+						<label for="inputEmail4">Tahun</label>
+						<input type="number" class="form-control" name="tahun" placeholder="Input Tahun">
 						</br>
 					</div>
 					<div class="form-group col-md-2">
@@ -63,7 +77,8 @@
 									</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
+								<button type="submit" class="btn btn-primary">Save changes</button>
+								</form>
 							</div>
 									</div>
 								</div>
@@ -73,33 +88,58 @@
 					<table class="table">
 						<thead class="thead-dark">
 							<tr>
-								<th scope="col">#</th>
-								<th scope="col">First</th>
-								<th scope="col">Last</th>
-								<th scope="col">Handle</th>
+								<th scope="col">NIS</th>
+								<th scope="col">Nama</th>
+								<th scope="col">Tahun Ajaran</th>
+								<th scope="col">Semester</th>
+								<th scope="col">Jumlah Tagihan</th>
+								<th scope="col">Status</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<th scope="row">1</th>
-									<td>Mark</td>
-									<td>Otto</td>
-									<td>@mdo</td>
-							</tr>
-							<tr>
-								<th scope="row">2</th>
-									<td>Jacob</td>
-									<td>Thornton</td>
-									<td>@fat</td>
-							</tr>
-							<tr>
-								<th scope="row">3</th>
-									<td>Larry</td>
-									<td>the Bird</td>
-									<td>@twitter</td>
-							</tr>
+							<?php 
+								foreach($data as $i){?>
+								 <tr>
+									<td><?php echo $i->NIS; ?></td>
+									<td><?php echo $i->nama; ?></td>
+									<td><?php echo $i->tahun_ajaran; ?></td>
+									<td><?php echo $i->semester; ?></td>
+									<td><?php echo $i->jumlah; ?></td>
+									<td><?php echo $i->status; ?></td>
+									<td><a class="btn btn-warning">Edit</a>&nbsp;<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModall">Hapus</button>&nbsp;
+										<?php if($i->status != 'Lunas'){?>
+										<a class="btn btn-success" href="<?php echo base_url('index.php/Pegawai_Controller/halaman_bayar_uang_buku/').$i->pembayaran_id?>">Bayar</a></td>
+									<?php } ?>
+								</tr>
+								<div class="modal fade" id="exampleModall" tabindex="-1" role="dialog" aria-labelledby="ExampleModallTittle" aria=hidden="true">
+									<div class="modal-dialog modal-dialog centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<center>Apakah anda yakin ingin menghapus?</center>
+											</div>
+											<div class="modal-footer">
+												<button class= "btn btn-default" data-dismiss="modal">Close</button>
+												&nbsp;<a class="btn btn-danger" href="<?php echo base_url()?>index.php/Pegawai_Controller/hapus_uang_buku/<?php echo $i->pembayaran_id;?>">Hapus</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php } ?>
+							
 						</tbody>
 					</table>
+					<center>
+					<?php if(isset($pagination)){
+						echo $pagination;
+					}
+						?>
+					</center>
               </div>
               <div class="card-footer ">
                 <hr>

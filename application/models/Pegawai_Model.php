@@ -27,7 +27,10 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->insert($table,$data);
 		return $result;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 08a3bd1d13744eb6ff96d4cfe569e31b071a35fb
 	public function ambil_data_pondok($data){
 		$result = $this->db->get('v_lihatpembayaranpondok',$data);
 		return $result->row();
@@ -88,5 +91,32 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->query("Select jumlah_data_pembayaran_bimbel() as total");
 		return $result->row();
 	}
+<<<<<<< HEAD
 
+=======
+	public function pembayaran_buku($number,$offset){
+		$result = $this->db->get("v_lihatpembayaranbuku",$number,$offset);
+		return $result->result();
+	}
+	public function jumlah_data_pembayaran_buku(){
+		$result = $this->db->query("Select jumlah_data_pembayaran_buku() as total");
+		return $result->row();
+	}
+	public function hapus_uang_buku($id){
+		$result = $this->db->query("call hapus_uang_buku('".$id."')");
+		return $result;
+	}
+	public function tambah_uang_buku($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function bayar_uang_buku($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
+	public function pembayaran_pengeluaran($number,$offset){
+		$result = $this->db->get("pengeluaran",$number,$offset);
+		return $result->result();
+	}
+>>>>>>> 08a3bd1d13744eb6ff96d4cfe569e31b071a35fb
 }
