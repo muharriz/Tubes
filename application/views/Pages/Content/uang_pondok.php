@@ -17,24 +17,19 @@
               <div class="card-header ">
                 <h5 class="card-title"><center>Pembayaran Uang Pondok</center></h5>
 				<div class="form-row">
-					<div class="form-group col-md-5">
-						<label for="inputEmail4">NIS</label>
-						<input type="email" class="form-control" id="inputEmail4" placeholder="Nomor Induk Siswa">
+					<div class="form-group col-md-5" action="<?php echo base_url('index.php/Pegawai_Controller/cari_uang_pondok')?>">
+						<form method=>
+						<label for="inputEmail4">Nama</label>
+						<input type="email" class="form-control" name="nama" placeholder="Masukkan Nama Siswa">
 					</div>
 					<div class="form-group col-md-3">
-						<label for="inputPassword4">Kelas</label>
-						<select class="custom-select" required>
-							<option value="">Pilih Kelas</option>
-							<option value="1">Tujuh</option>
-							<option value="2">Delapan</option>
-							<option value="3">Sembilan</option>
-						</select>
 					</div>
 					<div class="form-group col-md-2">
 					</div>
 					<div class="form-group col-md-2">
-						</br>
+						<br/>
 						<button type="button" class="btn btn-primary">Cari</button>
+						</form>
 					</div>
 					</div>
 					
@@ -116,7 +111,7 @@
 									<td><?php echo $i->bulan; ?></td>
 									<td><?php echo $i->jumlah; ?></td>
 									<td><?php echo $i->status; ?></td>
-									<td><a class="btn btn-warning">Edit</a>&nbsp;<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModall">Hapus</button>&nbsp;
+									<td><a class="btn btn-warning"  href="<?php echo base_url('index.php/Pegawai_Controller/edit_uang_pondok/').$i->pembayaran_id?>">Edit</a>&nbsp;<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModall">Hapus</button>&nbsp;
 										<?php if($i->status != 'Lunas'){?>
 										<a class="btn btn-success" href="<?php echo base_url('index.php/Pegawai_Controller/halaman_bayar_uang_pondok/').$i->pembayaran_id?>">Bayar</a></td>
 									<?php } ?>
