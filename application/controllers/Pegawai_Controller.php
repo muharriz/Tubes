@@ -153,10 +153,6 @@ class Pegawai_Controller extends CI_Controller {
 		}
 
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> 08a3bd1d13744eb6ff96d4cfe569e31b071a35fb
 
 	// Fungsi untuk membuka halaman edit uang pondok
 	public function edit_uang_pondok($id){
@@ -528,11 +524,7 @@ class Pegawai_Controller extends CI_Controller {
 		}
 
 	}
-<<<<<<< HEAD
-=======
-	
 
->>>>>>> 08a3bd1d13744eb6ff96d4cfe569e31b071a35fb
 
 	// KUMPULAN FUNGSI UNTUK FITUR UANG BUKU
 
