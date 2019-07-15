@@ -17,10 +17,10 @@
               <div class="card-header ">
                 <h5 class="card-title"><center>Pembayaran Uang Pondok</center></h5>
 				<div class="form-row">
-					<div class="form-group col-md-5" action="<?php echo base_url('index.php/Pegawai_Controller/cari_uang_pondok')?>">
-						<form method=>
+					<div class="form-group col-md-5">
+						<form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/cari_pondok')?>">
 						<label for="inputEmail4">Nama</label>
-						<input type="email" class="form-control" name="nama" placeholder="Masukkan Nama Siswa">
+						<input type="text" class="form-control" name="nama" placeholder="Masukkan Nama Siswa" required>
 					</div>
 					<div class="form-group col-md-3">
 					</div>
@@ -28,7 +28,7 @@
 					</div>
 					<div class="form-group col-md-2">
 						<br/>
-						<button type="button" class="btn btn-primary">Cari</button>
+						<button type="submit" class="btn btn-primary">Cari</button>
 						</form>
 					</div>
 					</div>
@@ -111,12 +111,12 @@
 									<td><?php echo $i->bulan; ?></td>
 									<td><?php echo $i->jumlah; ?></td>
 									<td><?php echo $i->status; ?></td>
-									<td><a class="btn btn-warning"  href="<?php echo base_url('index.php/Pegawai_Controller/edit_uang_pondok/').$i->pembayaran_id?>">Edit</a>&nbsp;<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModall">Hapus</button>&nbsp;
+									<td><a class="btn btn-warning"  href="<?php echo base_url('index.php/Pegawai_Controller/edit_uang_pondok/').$i->pembayaran_id?>">Edit</a>&nbsp;<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal<?php echo $i->pembayaran_id?>">Hapus</button>&nbsp;
 										<?php if($i->status != 'Lunas'){?>
 										<a class="btn btn-success" href="<?php echo base_url('index.php/Pegawai_Controller/halaman_bayar_uang_pondok/').$i->pembayaran_id?>">Bayar</a></td>
 									<?php } ?>
 								</tr>
-								<div class="modal fade" id="exampleModall" tabindex="-1" role="dialog" aria-labelledby="ExampleModallTittle" aria=hidden="true">
+								<div class="modal fade" id="exampleModal<?php echo $i->pembayaran_id?>" tabindex="-1" role="dialog" aria-labelledby="ExampleModallTittle" aria=hidden="true">
 									<div class="modal-dialog modal-dialog centered" role="document">
 										<div class="modal-content">
 											<div class="modal-header">
@@ -155,3 +155,4 @@
           </div>
         </div>
         </div>
+       

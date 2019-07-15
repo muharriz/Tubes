@@ -18,8 +18,6 @@
             <form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/bayar_uang_buku/').$id?>">
   						<label for="inputEmail4">Jumlah</label>
   						<input type="number" class="form-control"  name="jumlah" placeholder="Masukkan Jumlah Pembayaran">
-  						<label for="inputEmail4">Potongan</label>
-  						<input type="number" class="form-control"  name="potongan" placeholder="Masukkan Potongan Pembayaran">
   						<label for="inputEmail4">Tanggal</label>
   						<input type="date" class="form-control" name="tanggal" placeholder="Masukkan Tanggal Dibayarkan">
 						</br>

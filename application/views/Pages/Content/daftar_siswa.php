@@ -25,7 +25,7 @@
 						<input type="text" class="form-control" name="alamat" placeholder="Masukkan Alamat">
 						<label for="inputEmail4">Tanggal Masuk</label>
 						<input type="date" class="form-control" name="tanggal">
-						<label for="inputEmail4">Jenis Kelamin</label>
+						<label for="inputEmail4">Status</label>
 						<select class="custom-select" name="status" required>
 							<option value="Aktif">Aktif</option>
 							<option value="Tidak Aktif">Tidak Aktif</option>

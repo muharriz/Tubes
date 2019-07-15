@@ -6,7 +6,7 @@
 	      <div class="logo">
 	        <a href="#" class="simple-text logo-mini">
 	          <div class="logo-image-small">
-	            <img src="<?php echo base_url()?>/assets/img/default-avatar.png" width="55px" height="55px">
+	            <img src="<?php echo base_url('assets/img/guru.png')?>" width="80px" height="40px">
 	          </div>
 	        </a>
 	        <a href="#" class="simple-text logo-normal">
@@ -20,7 +20,7 @@
 	      </div>
 	      <div class="sidebar-wrapper">
 	        <ul class="nav">
-	          <li class="active ">
+	          <li>
 
 	            <a href="<?php echo base_url('index.php/Pegawai_Controller/dashboard')?>">
 				  <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="nc-icon nc-box"></i>Pemasukan</a>
@@ -40,6 +40,9 @@
 						</li>
 						<li>
 							<a href="<?php echo base_url('index.php/Pegawai_Controller/uang_bimbel')?>">Uang Bimbel</a>
+						</li>
+						<li>
+							<a href="<?php echo base_url('index.php/Pegawai_Controller/uang_infaq')?>">Uang Infaq</a>
 						</li>
 						</ul>
 				  </a>
@@ -64,6 +67,15 @@
 					<ul class="collapse list-unstyled" id="pageSubmenu3">
 						<li>
 							<a href="<?php echo base_url('index.php/Pegawai_Controller/daftar_siswa')?>">Tambah Siswa</a>
+						</li>
+						<li>
+							<a href="<?php echo base_url('index.php/Pegawai_Controller/lihat_siswa')?>">Lihat Siswa</a>
+						</li>
+						<li>
+							<a href="<?php echo base_url('index.php/Pegawai_Controller/tagihan')?>">Tagihan</a>
+						</li>
+						<li>
+							<a href="#">Pegawai</a>
 						</li>
 					</ul>
 				  </a>

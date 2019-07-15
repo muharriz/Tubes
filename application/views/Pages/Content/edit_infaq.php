@@ -14,34 +14,20 @@
         		<div class="alert alert-danger"><?php echo $this->session->flashdata('error')?></div>
         	<?php }?>
               <div class="card-header ">
-                <h5 class="card-title"><center>Daftar Siswa</center></h5>
+                <h5 class="card-title"><center>Edit Infaq</center></h5>
 				<div class="form-row">
 					<div class="form-group col-md-4">
 					</div>
 					<div class="form-group col-md-4">
-						<form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/update_uang_pondok/'.$id)?>">
-						<label for="inputEmail4">Tahun</label>
-						<input type="number" class="form-control" name="tahun" placeholder="Masukkan Nama Siswa" value="<?php echo $data->tahun?>">
-						<label for="inputEmail4">Bulan</label>
-						<select class="custom-select" name="bulan"  selected="<?php echo $data->bulan?>" required >
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
-							<option value="11">11</option>
-							<option value="12">12</option>
-						</select>
-						<label for="inputEmail4">Status</label>
-						<select class="custom-select" name="status" required value="<?php echo $data->status?>">
-							<option value="Belum Lunas">Belum Lunas</option>
-							<option value="Lunas">Lunas</option>
-						</select>
+						<form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/update_uang_infaq/'.$id)?>">
+						<label for="inputEmail4">Nama Lengkap Donatur</label>
+							<input type="text" class="form-control" name="namalengkap" placeholder="Nama Lengkap Donatur" value="<?php echo $data->nama_lengkap?>" required>
+						<label for="inputEmail4">Jumlah</label>
+							<input type="number" class="form-control" name="jumlah" placeholder="" value="<?php echo $data->jumlah?>" required>
+						<label for="inputEmail4">Tanggal Diterima</label>
+							<input type="date" class="form-control" name="tanggalditerima" placeholder="mm-dd-YYYY" value="<?php echo $data->tanggal_diterima?>" required>
+						<label for="inputEmail4">Keterangan</label>
+							<input type="text" class="form-control" name="keterangan" placeholder="Keterangan Infaq" value="<?php echo $data->keterangan?>" required>
 						</br>
 						<div class="col-md-4 offset-md-8"><button type="submit" class="btn btn-primary">Simpan</button></div>
 						</form>
@@ -55,7 +41,6 @@
               <div class="card-footer ">
                 <hr>
                 <div class="stats">
-                  
                 </div>
               </div>
             </div>

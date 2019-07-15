@@ -5,27 +5,27 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card ">
+            	<?php if($this->session->flashdata('success')){?>
+        		<div class="alert alert-success"><?php echo $this->session->flashdata('success')?></div>
+        	<?php }?>
+        	<!--Alert kalau gagal-->
+        	<?php if($this->session->flashdata('error')){?>
+        		<div class="alert alert-danger"><?php echo $this->session->flashdata('error')?></div>
+        	<?php }?>
               <div class="card-header ">
                 <h5 class="card-title"><center>Pembayaran Uang Bimbel</center></h5>
 				<div class="form-row">
 					<div class="form-group col-md-5">
-						<label for="inputEmail4">NIS</label>
-						<input type="email" class="form-control" id="inputEmail4" placeholder="Nomor Induk Siswa">
-					</div>
-					<div class="form-group col-md-3">
-						<label for="inputPassword4">Kelas</label>
-						<select class="custom-select" required>
-							<option value="">Pilih Kelas</option>
-							<option value="1">Tujuh</option>
-							<option value="2">Delapan</option>
-							<option value="3">Sembilan</option>
-						</select>
+						<form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/cari_bimbel')?>">
+						<label for="inputEmail4">Nama</label>
+						<input type="text" class="form-control" name="nama" id="inputEmail4" placeholder="Nama Siswa">
 					</div>
 					<div class="form-group col-md-2">
 					</div>
 					<div class="form-group col-md-2">
 						</br>
-						<button type="button" class="btn btn-primary">Cari</button>
+						<button type="submit" class="btn btn-primary">Cari</button>
+						</form>
 					</div>
 					</div>
 					<!-- Button trigger modal -->
@@ -93,6 +93,7 @@
 								<th scope="col">Semester</th>
 								<th scope="col">Jumlah Tagihan</th>
 								<th scope="col">Status</th>
+								<th scope="col">Sisa Pembayaran</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -106,12 +107,19 @@
 									<td><?php echo $i->semester; ?></td>
 									<td><?php echo $i->jumlah; ?></td>
 									<td><?php echo $i->status; ?></td>
-									<td><a class="btn btn-warning">Edit</a>&nbsp;<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModall">Hapus</button>&nbsp;
+									<td><?php 
+												if(is_null($i->jumlah_terbayar))
+													echo $i->jumlah;
+												else
+													echo ($i->jumlah - $i->jumlah_terbayar);
+									?></td>
+									<td><a class="btn btn-warning" href="<?php echo base_url('index.php/Pegawai_Controller/halaman_edit_uang_bimbel/').$i->pembayaran_id?>">Edit</a>
+										<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal<?php echo $i->pembayaran_id?>">Hapus</button>
 										<?php if($i->status != 'Lunas'){?>
 										<a class="btn btn-success" href="<?php echo base_url('index.php/Pegawai_Controller/halaman_bayar_uang_bimbel/').$i->pembayaran_id?>">Bayar</a></td>
 									<?php } ?>
 								</tr>
-								<div class="modal fade" id="exampleModall" tabindex="-1" role="dialog" aria-labelledby="ExampleModallTittle" aria=hidden="true">
+								<div class="modal fade" id="exampleModal<?php echo $i->pembayaran_id?>" tabindex="-1" role="dialog" aria-labelledby="ExampleModallTittle" aria=hidden="true">
 									<div class="modal-dialog modal-dialog centered" role="document">
 										<div class="modal-content">
 											<div class="modal-header">

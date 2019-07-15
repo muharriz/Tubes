@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2019 at 08:41 PM
+-- Generation Time: Jul 15, 2019 at 06:07 AM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -26,6 +26,14 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `hapus_siswa` (IN `nis` VARCHAR(25))  begin
+	delete from uang_bimbel where uang_bimbel.NIS like nis;
+    delete from uang_pembangunan where uang_pembangunan.NIS like nis;
+    delete from uang_buku where uang_buku.NIS like nis;
+    delete from uang_pondok where uang_pondok.NIS like nis;
+    delete from siswa where siswa.NIS like nis;
+end$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `hapus_uang_bimbel` (IN `id` INT(11))  NO SQL
 begin
 	delete from pembayaran_bimbel where pembayaran_id = id;
@@ -52,10 +60,22 @@ end$$
 --
 -- Functions
 --
+CREATE DEFINER=`root`@`localhost` FUNCTION `cek_pembayaran_bimbel` (`id` INT(11)) RETURNS INT(11) begin 
+	declare jumlah_dibayar int(11);
+	select sum(jumlah) into jumlah_dibayar from pembayaran_bimbel where pembayaran_id = id;
+    return jumlah_dibayar;
+end$$
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `cek_user` (`nip` VARCHAR(50), `password` VARCHAR(50)) RETURNS INT(5) begin
 	declare result int(5);
     select count(pegawai_id) into result from pegawai where pegawai_id LIKE nip and pegawai_password = password;
     return result;
+end$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `jumlah_data_infaq` () RETURNS INT(11) BEGIN
+	declare jumlah_data int(11);
+    select count(*) into jumlah_data from uang_infaq;
+    return jumlah_data;
 end$$
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `jumlah_data_pembayaran_bimbel` () RETURNS INT(11) NO SQL
@@ -92,6 +112,24 @@ BEGIN
     return jumlah_data;
 end$$
 
+CREATE DEFINER=`root`@`localhost` FUNCTION `jumlah_data_siswa` () RETURNS INT(11) BEGIN
+	declare jumlah_data int(11);
+    select count(*) into jumlah_data from siswa;
+    return jumlah_data;
+end$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `jumlah_pegawai` () RETURNS INT(11) begin 
+	declare jumlah int(11);
+    select count(pegawai_id) into jumlah from pegawai;
+    return jumlah;
+end$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `jumlah_siswa` () RETURNS INT(11) BEGIN
+	declare jumlah_siswa int(11);
+    select count(NIS) as jumlah into jumlah_siswa from siswa;
+	return jumlah_siswa;
+end$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -125,24 +163,25 @@ INSERT INTO `jenis_tagihan` (`tagihan_id`, `nama_tagihan`, `jumlah`, `keterangan
 
 CREATE TABLE `pegawai` (
   `pegawai_id` int(11) NOT NULL,
-  `pegawai_password` varchar(50) NOT NULL,
+  `pegawai_password` text NOT NULL,
   `nama_depan` varchar(25) NOT NULL,
   `nama_belakang` varchar(50) NOT NULL,
   `no_handphone` varchar(14) NOT NULL,
   `alamat` text NOT NULL,
-  `level` enum('Bendahara','Staff','Yayasan') NOT NULL
+  `level` enum('Bendahara','Staff','Yayasan') NOT NULL,
+  `status` enum('Aktif','Tidak Aktif') NOT NULL DEFAULT 'Aktif'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `pegawai`
 --
 
-INSERT INTO `pegawai` (`pegawai_id`, `pegawai_password`, `nama_depan`, `nama_belakang`, `no_handphone`, `alamat`, `level`) VALUES
-(100001, 'root', 'Ananda', 'Muharriz Sinaga', '+6287898365680', 'Jl. Pala Raya No.77 Perumnas Simalingkar', 'Bendahara'),
-(100002, 'root', 'Nadia', 'Nasywa', '+6285270069700', 'Jl.Marelan VII Gg.Amal I No 20', 'Staff'),
-(100003, 'root', 'Rafif', 'Rasyidi', '+6282172694268', 'Jl.Gunung Tua no 45', 'Staff'),
-(100004, 'root', 'Dinul ', 'Iman', '+6283167298340', 'Jl.Pancing no 37', 'Yayasan'),
-(100005, 'root', 'Deby', 'Salsabila', '+6287825638729', 'Jl.Dumai no 81', 'Staff');
+INSERT INTO `pegawai` (`pegawai_id`, `pegawai_password`, `nama_depan`, `nama_belakang`, `no_handphone`, `alamat`, `level`, `status`) VALUES
+(100001, 'root', 'Ananda', 'Muharriz Sinaga', '+6287898365680', 'Jl. Pala Raya No.77 Perumnas Simalingkar', 'Bendahara', 'Aktif'),
+(100002, 'root', 'Nadia', 'Nasywa', '+6285270069700', 'Jl.Marelan VII Gg.Amal I No 20', 'Staff', 'Aktif'),
+(100003, 'root', 'Rafif', 'Rasyidi', '+6282172694268', 'Jl.Gunung Tua no 45', 'Staff', 'Aktif'),
+(100004, 'root', 'Dinul ', 'Iman', '+6283167298340', 'Jl.Pancing no 37', 'Yayasan', 'Aktif'),
+(100005, 'root', 'Deby', 'Salsabila', '+6287825638729', 'Jl.Dumai no 81', 'Staff', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -194,7 +233,28 @@ CREATE TABLE `pembayaran_buku` (
 --
 
 INSERT INTO `pembayaran_buku` (`pembayaran_id`, `jumlah`, `tgl_pembayaran`, `pegawai_id`, `potongan`) VALUES
-(2, 350000, '2019-07-11', 100001, 350000);
+(2, 350000, '2019-07-11', 100001, 350000),
+(4, 100000, '2019-07-14', 100001, 0),
+(12, 300000, '2019-07-06', 100001, 0);
+
+--
+-- Triggers `pembayaran_buku`
+--
+DELIMITER $$
+CREATE TRIGGER `tr_cek_lunas_buku` AFTER INSERT ON `pembayaran_buku` FOR EACH ROW begin 
+	declare total_yg_sudah_dibayar int(11);
+    declare tagihan int(11);
+    
+    select jumlah into tagihan from v_lihatpembayaranbuku where pembayaran_id = new.pembayaran_id;
+    
+    select sum(jumlah) into total_yg_sudah_dibayar from pembayaran_buku where pembayaran_id = new.pembayaran_id;
+    
+    if(total_yg_sudah_dibayar >= tagihan) THEN
+      update uang_buku set status='Lunas' where pembayaran_id = new.pembayaran_id;
+    end IF;
+end
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -215,7 +275,30 @@ CREATE TABLE `pembayaran_pembangunan` (
 --
 
 INSERT INTO `pembayaran_pembangunan` (`pembayaran_id`, `jumlah`, `tgl_pembayaran`, `pegawai_id`, `potongan`) VALUES
-(2, 0, '0000-00-00', 100001, 0);
+(2, 0, '0000-00-00', 100001, 0),
+(2, 500000, '2019-07-06', 100001, 0),
+(3, 300000, '2019-07-06', 100001, 0),
+(3, 3000000, '2019-07-14', 100001, 0),
+(3, 2950000, '2019-07-14', 100001, 0);
+
+--
+-- Triggers `pembayaran_pembangunan`
+--
+DELIMITER $$
+CREATE TRIGGER `tr_cek_lunas_pembangunan` AFTER INSERT ON `pembayaran_pembangunan` FOR EACH ROW begin 
+	declare total_yg_sudah_dibayar int(11);
+    declare tagihan int(11);
+    
+    select jumlah into tagihan from v_lihatpembayaranpembangunan where pembayaran_id = new.pembayaran_id;
+    
+    select sum(jumlah) into total_yg_sudah_dibayar from pembayaran_pembangunan where pembayaran_id = new.pembayaran_id;
+    
+    if(total_yg_sudah_dibayar >= tagihan) THEN
+      update uang_pembangunan set status='Lunas' where pembayaran_id = new.pembayaran_id;
+    end IF;
+end
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -245,20 +328,22 @@ INSERT INTO `pembayaran_pondok` (`pembayaran_id`, `jumlah`, `tgl_pembayaran`, `p
 -- Triggers `pembayaran_pondok`
 --
 DELIMITER $$
-CREATE TRIGGER `cek_lunas` BEFORE INSERT ON `pembayaran_pondok` FOR EACH ROW begin 
+CREATE TRIGGER `tr_cek_lunas_pondok` AFTER INSERT ON `pembayaran_pondok` FOR EACH ROW begin 
 	declare total_yg_sudah_dibayar int(11);
     declare total_potongan int(11);
     declare total int(11);
     declare tagihan int(11);
+    
     select jumlah into tagihan from v_lihatpembayaranpondok where pembayaran_id = new.pembayaran_id;
+    
     select sum(jumlah) into total_yg_sudah_dibayar from pembayaran_pondok where pembayaran_id = new.pembayaran_id;
+    
     select sum(potongan) into total_potongan from pembayaran_pondok where pembayaran_id = new.pembayaran_id;
+    
     set total  = total_yg_sudah_dibayar + total_potongan;
-    set total = total + new.jumlah;
-    set total = total + new.potongan;
     
     if(total >= tagihan) THEN
-      update uang_pondok set status='lunas' where pembayaran_id = new.pembayaran_id;
+      update uang_pondok set status='Lunas' where pembayaran_id = new.pembayaran_id;
     end IF;
 end
 $$
@@ -327,8 +412,7 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`NIS`, `nama`, `jenis_kelamin`, `alamat`, `tgl_masuk`, `status`) VALUES
-('1102007', 'Dinul Kappa', 'Laki laki', 'jln.bromo', '2019-07-09', 'Aktif'),
-('1214001', 'amirah husni', 'Perempuan', 'jl.sinar no 78', '2014-06-01', 'Aktif'),
+('1214001', 'amirah husni', 'Perempuan', 'jl.sinar no 77', '2014-06-01', 'Aktif'),
 ('1214002', 'andieni chayakamil', 'Perempuan', 'jl.hiu no 2', '2014-06-01', 'Aktif'),
 ('1214003', 'azra nazifah', 'Perempuan', 'jl.dutik no 69', '2014-06-01', 'Aktif'),
 ('1214004', 'badzlina atika salsabila', 'Perempuan', 'jl.kupol no 91', '2014-06-01', 'Aktif'),
@@ -384,7 +468,6 @@ INSERT INTO `siswa` (`NIS`, `nama`, `jenis_kelamin`, `alamat`, `tgl_masuk`, `sta
 ('1214054', 'shifa munra', 'Perempuan', 'jl.muda no 35', '2014-06-01', 'Aktif'),
 ('1214055', 'shofiyah az zahro', 'Perempuan', 'jl.manam no 6', '2014-06-01', 'Aktif'),
 ('1214056', 'syifa kania ananda', 'Perempuan', 'jl.tigah no 5', '2014-06-01', 'Aktif'),
-('1234567', 'Dinul Kapp', 'Laki laki', 'jln.mamiyai', '2019-07-11', 'Aktif'),
 ('1302001', 'annisa fitria', 'Perempuan', 'jl.kayu no 1', '2015-06-01', 'Aktif'),
 ('1314002', 'aprita irawan', 'Perempuan', 'jl.pojiko no 67', '2015-06-01', 'Aktif'),
 ('1314003', 'atha nayva haniv purba', 'Perempuan', 'jl.kupi no 78', '2015-06-01', 'Aktif'),
@@ -438,7 +521,7 @@ INSERT INTO `siswa` (`NIS`, `nama`, `jenis_kelamin`, `alamat`, `tgl_masuk`, `sta
 ('1402001', 'ade ermanisa', 'Perempuan', 'jl.kuyi no 76', '2016-06-01', 'Aktif'),
 ('1402002', 'adinda nur azizah', 'Perempuan', 'jl.tuyio no 6', '2016-06-01', 'Aktif'),
 ('1402003', 'adzkia khairunnisa', 'Perempuan', 'jl.tujiko no 45', '2016-06-01', 'Aktif'),
-('1402004', 'ainus shafiyah', 'Perempuan', 'jl.poljio no 9', '2016-06-01', 'Aktif'),
+('1402004', 'ainus shafiyah', 'Perempuan', 'jl.poljio no 9', '2016-06-01', 'Tidak Aktif'),
 ('1402005', 'aisyah husni', 'Perempuan', 'jl.ader no 34', '2016-06-01', 'Aktif'),
 ('1402006', 'alifa cahya ningrum', 'Perempuan', 'jl.kuipo no 89', '2016-06-01', 'Aktif'),
 ('1402007', 'aisya salsabila', 'Perempuan', 'jl.buhog no 4', '2016-06-01', 'Aktif'),
@@ -539,8 +622,8 @@ INSERT INTO `siswa` (`NIS`, `nama`, `jenis_kelamin`, `alamat`, `tgl_masuk`, `sta
 ('1714021', 'yusnia rani', 'Perempuan', 'jl.bue no 6', '2019-06-01', 'Aktif'),
 ('1714022', 'rosmita ragil', 'Perempuan', 'jl.kio no 4', '2019-06-01', 'Aktif'),
 ('1714023', 'monica ginting', 'Perempuan', 'jl.nuy no 3', '2019-06-01', 'Aktif'),
-('1714024', 'fatimah zahra', 'Perempuan', 'jl.tui no 2', '2019-06-01', 'Aktif'),
-('1714025', 'annisa humairah', 'Perempuan', 'jl.guy no 4', '2019-06-01', 'Aktif');
+('1714024', 'fatimah zahra', 'Perempuan', 'jl.tui no 2', '2019-06-01', 'Tidak Aktif'),
+('1714025', 'annisa humairah', 'Perempuan', 'jl.guy no 4', '2019-06-01', 'Tidak Aktif');
 
 -- --------------------------------------------------------
 
@@ -562,7 +645,6 @@ CREATE TABLE `uang_bimbel` (
 --
 
 INSERT INTO `uang_bimbel` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun_ajaran`, `semester`, `status`) VALUES
-(2, '1214002', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
 (3, '1214003', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
 (4, '1214004', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
 (5, '1214005', 109, '2014/2015', 'Ganjil', 'Belum Lunas'),
@@ -603,9 +685,9 @@ CREATE TABLE `uang_buku` (
 --
 
 INSERT INTO `uang_buku` (`pembayaran_id`, `NIS`, `jumlah`, `tahun_ajaran`, `semester`, `status`) VALUES
-(2, '1214002', 350000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(2, '1214002', 350000, '2014/2015', 'Ganjil', 'Lunas'),
 (3, '1214003', 300000, '2014/2015', 'Ganjil', 'Belum Lunas'),
-(4, '1214004', 100000, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(4, '1214004', 100000, '2014/2015', 'Ganjil', 'Lunas'),
 (5, '1214005', 300000, '2014/2015', 'Ganjil', 'Belum Lunas'),
 (6, '1214006', 600000, '2014/2015', 'Ganjil', 'Belum Lunas'),
 (7, '1214007', 100000, '2014/2015', 'Ganjil', 'Belum Lunas'),
@@ -680,7 +762,7 @@ CREATE TABLE `uang_pembangunan` (
 
 INSERT INTO `uang_pembangunan` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun_ajaran`, `semester`, `status`) VALUES
 (2, '1214002', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
-(3, '1214003', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
+(3, '1214003', 310, '2014/2015', 'Ganjil', 'Lunas'),
 (4, '1214004', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
 (5, '1214005', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
 (6, '1214006', 310, '2014/2015', 'Ganjil', 'Belum Lunas'),
@@ -789,6 +871,86 @@ INSERT INTO `uang_spp` (`pembayaran_id`, `NIS`, `tagihan_id`, `tahun_ajaran`, `s
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `v_cicilanbimbel`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_cicilanbimbel` (
+`pembayaran_id` int(11)
+,`NIS` varchar(16)
+,`nama` varchar(60)
+,`jumlah` int(11)
+,`tahun_ajaran` varchar(9)
+,`semester` enum('Genap','Ganjil')
+,`status` enum('Lunas','Belum Lunas')
+,`jumlah_terbayar` decimal(32,0)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_cicilanbuku`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_cicilanbuku` (
+`pembayaran_id` int(11)
+,`NIS` varchar(16)
+,`nama` varchar(60)
+,`tahun_ajaran` varchar(9)
+,`semester` enum('Ganjil','Genap')
+,`jumlah` int(11)
+,`status` enum('Lunas','Belum Lunas')
+,`jumlah_terbayar` decimal(32,0)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_cicilanpembangunan`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_cicilanpembangunan` (
+`pembayaran_id` int(11)
+,`NIS` varchar(16)
+,`nama` varchar(60)
+,`tahun_ajaran` varchar(9)
+,`jumlah` int(11)
+,`status` enum('Lunas','Belum Lunas')
+,`jumlah_terbayar` decimal(32,0)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_lihatinfaq`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_lihatinfaq` (
+`donatur_id` int(11)
+,`nama_lengkap` varchar(60)
+,`jumlah` int(11)
+,`tanggal_diterima` date
+,`nama_pegawai` varchar(76)
+,`keterangan` varchar(50)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_lihatpegawai`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_lihatpegawai` (
+`pegawai_id` int(11)
+,`nama` varchar(76)
+,`no_handphone` varchar(14)
+,`alamat` text
+,`level` enum('Bendahara','Staff','Yayasan')
+,`status` enum('Aktif','Tidak Aktif')
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `v_lihatpembayaranbimbel`
 -- (See below for the actual view)
 --
@@ -812,9 +974,9 @@ CREATE TABLE `v_lihatpembayaranbuku` (
 `pembayaran_id` int(11)
 ,`NIS` varchar(16)
 ,`nama` varchar(60)
-,`jumlah` int(11)
 ,`tahun_ajaran` varchar(9)
 ,`semester` enum('Ganjil','Genap')
+,`jumlah` int(11)
 ,`status` enum('Lunas','Belum Lunas')
 );
 
@@ -829,7 +991,6 @@ CREATE TABLE `v_lihatpembayaranpembangunan` (
 ,`NIS` varchar(16)
 ,`nama` varchar(60)
 ,`tahun_ajaran` varchar(9)
-,`semester` enum('Ganjil','Genap')
 ,`jumlah` int(11)
 ,`status` enum('Lunas','Belum Lunas')
 );
@@ -853,11 +1014,84 @@ CREATE TABLE `v_lihatpembayaranpondok` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `v_lihatpengeluaran`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_lihatpengeluaran` (
+`pengeluaran_id` int(11)
+,`jumlah` int(11)
+,`tgl_dipakai` date
+,`keterangan` varchar(100)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_lihatsiswaaktif`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_lihatsiswaaktif` (
+`NIS` varchar(16)
+,`nama` varchar(60)
+,`jenis_kelamin` enum('Laki laki','Perempuan')
+,`alamat` text
+,`tgl_masuk` date
+,`status` enum('Aktif','Tidak Aktif')
+);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_cicilanbimbel`
+--
+DROP TABLE IF EXISTS `v_cicilanbimbel`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_cicilanbimbel`  AS  select `v_lihatpembayaranbimbel`.`pembayaran_id` AS `pembayaran_id`,`v_lihatpembayaranbimbel`.`NIS` AS `NIS`,`v_lihatpembayaranbimbel`.`nama` AS `nama`,`v_lihatpembayaranbimbel`.`jumlah` AS `jumlah`,`v_lihatpembayaranbimbel`.`tahun_ajaran` AS `tahun_ajaran`,`v_lihatpembayaranbimbel`.`semester` AS `semester`,`v_lihatpembayaranbimbel`.`status` AS `status`,sum(`pembayaran_bimbel`.`jumlah`) AS `jumlah_terbayar` from (`v_lihatpembayaranbimbel` left join `pembayaran_bimbel` on((`v_lihatpembayaranbimbel`.`pembayaran_id` = `pembayaran_bimbel`.`pembayaran_id`))) group by `v_lihatpembayaranbimbel`.`pembayaran_id` order by `v_lihatpembayaranbimbel`.`tahun_ajaran` desc,`v_lihatpembayaranbimbel`.`semester` desc,`v_lihatpembayaranbimbel`.`NIS` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_cicilanbuku`
+--
+DROP TABLE IF EXISTS `v_cicilanbuku`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_cicilanbuku`  AS  select `v_lihatpembayaranbuku`.`pembayaran_id` AS `pembayaran_id`,`v_lihatpembayaranbuku`.`NIS` AS `NIS`,`v_lihatpembayaranbuku`.`nama` AS `nama`,`v_lihatpembayaranbuku`.`tahun_ajaran` AS `tahun_ajaran`,`v_lihatpembayaranbuku`.`semester` AS `semester`,`v_lihatpembayaranbuku`.`jumlah` AS `jumlah`,`v_lihatpembayaranbuku`.`status` AS `status`,sum(`pembayaran_buku`.`jumlah`) AS `jumlah_terbayar` from (`v_lihatpembayaranbuku` left join `pembayaran_buku` on((`v_lihatpembayaranbuku`.`pembayaran_id` = `pembayaran_buku`.`pembayaran_id`))) group by `v_lihatpembayaranbuku`.`pembayaran_id` order by `v_lihatpembayaranbuku`.`tahun_ajaran` desc,`v_lihatpembayaranbuku`.`semester` desc,`v_lihatpembayaranbuku`.`NIS` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_cicilanpembangunan`
+--
+DROP TABLE IF EXISTS `v_cicilanpembangunan`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_cicilanpembangunan`  AS  select `v_lihatpembayaranpembangunan`.`pembayaran_id` AS `pembayaran_id`,`v_lihatpembayaranpembangunan`.`NIS` AS `NIS`,`v_lihatpembayaranpembangunan`.`nama` AS `nama`,`v_lihatpembayaranpembangunan`.`tahun_ajaran` AS `tahun_ajaran`,`v_lihatpembayaranpembangunan`.`jumlah` AS `jumlah`,`v_lihatpembayaranpembangunan`.`status` AS `status`,sum(`pembayaran_pembangunan`.`jumlah`) AS `jumlah_terbayar` from (`v_lihatpembayaranpembangunan` left join `pembayaran_pembangunan` on((`v_lihatpembayaranpembangunan`.`pembayaran_id` = `pembayaran_pembangunan`.`pembayaran_id`))) group by `v_lihatpembayaranpembangunan`.`pembayaran_id` order by `v_lihatpembayaranpembangunan`.`tahun_ajaran` desc,`v_lihatpembayaranpembangunan`.`NIS` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_lihatinfaq`
+--
+DROP TABLE IF EXISTS `v_lihatinfaq`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatinfaq`  AS  select `uang_infaq`.`donatur_id` AS `donatur_id`,`uang_infaq`.`nama_lengkap` AS `nama_lengkap`,`uang_infaq`.`jumlah` AS `jumlah`,`uang_infaq`.`tanggal_diterima` AS `tanggal_diterima`,concat(`pegawai`.`nama_depan`,' ',`pegawai`.`nama_belakang`) AS `nama_pegawai`,`uang_infaq`.`keterangan` AS `keterangan` from (`uang_infaq` join `pegawai` on((`uang_infaq`.`pegawai_id` = `pegawai`.`pegawai_id`))) order by `uang_infaq`.`tanggal_diterima` desc ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_lihatpegawai`
+--
+DROP TABLE IF EXISTS `v_lihatpegawai`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpegawai`  AS  select `pegawai`.`pegawai_id` AS `pegawai_id`,concat(`pegawai`.`nama_depan`,' ',`pegawai`.`nama_belakang`) AS `nama`,`pegawai`.`no_handphone` AS `no_handphone`,`pegawai`.`alamat` AS `alamat`,`pegawai`.`level` AS `level`,`pegawai`.`status` AS `status` from `pegawai` order by `pegawai`.`status`,`pegawai`.`nama_depan`,`pegawai`.`nama_belakang`,`pegawai`.`level` ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `v_lihatpembayaranbimbel`
 --
 DROP TABLE IF EXISTS `v_lihatpembayaranbimbel`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranbimbel`  AS  select `uang_bimbel`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_bimbel`.`tahun_ajaran` AS `tahun_ajaran`,`uang_bimbel`.`semester` AS `semester`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_bimbel`.`status` AS `status` from ((`uang_bimbel` join `siswa`) join `jenis_tagihan` on(((`uang_bimbel`.`NIS` = `siswa`.`NIS`) and (`uang_bimbel`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `siswa`.`NIS` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranbimbel`  AS  select `uang_bimbel`.`pembayaran_id` AS `pembayaran_id`,`uang_bimbel`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_bimbel`.`tahun_ajaran` AS `tahun_ajaran`,`uang_bimbel`.`semester` AS `semester`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_bimbel`.`status` AS `status` from ((`uang_bimbel` join `siswa`) join `jenis_tagihan` on(((`uang_bimbel`.`NIS` = `siswa`.`NIS`) and (`uang_bimbel`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `uang_bimbel`.`tahun_ajaran` desc,`uang_bimbel`.`semester` desc,`siswa`.`NIS` ;
 
 -- --------------------------------------------------------
 
@@ -866,7 +1100,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_lihatpembayaranbuku`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranbuku`  AS  select `uang_buku`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_buku`.`jumlah` AS `jumlah`,`uang_buku`.`tahun_ajaran` AS `tahun_ajaran`,`uang_buku`.`semester` AS `semester`,`uang_buku`.`status` AS `status` from ((`uang_buku` join `siswa`) join `jenis_tagihan` on((`uang_buku`.`NIS` = `siswa`.`NIS`))) order by `siswa`.`NIS` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranbuku`  AS  select `uang_buku`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_buku`.`tahun_ajaran` AS `tahun_ajaran`,`uang_buku`.`semester` AS `semester`,`uang_buku`.`jumlah` AS `jumlah`,`uang_buku`.`status` AS `status` from (`uang_buku` join `siswa` on((`siswa`.`NIS` = `uang_buku`.`NIS`))) order by `siswa`.`status`,`uang_buku`.`tahun_ajaran` desc,`uang_buku`.`semester` desc ;
 
 -- --------------------------------------------------------
 
@@ -875,7 +1109,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_lihatpembayaranpembangunan`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranpembangunan`  AS  select `uang_pembangunan`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_pembangunan`.`tahun_ajaran` AS `tahun_ajaran`,`uang_pembangunan`.`semester` AS `semester`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_pembangunan`.`status` AS `status` from ((`uang_pembangunan` join `siswa`) join `jenis_tagihan` on(((`uang_pembangunan`.`NIS` = `siswa`.`NIS`) and (`uang_pembangunan`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `siswa`.`NIS` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranpembangunan`  AS  select `uang_pembangunan`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_pembangunan`.`tahun_ajaran` AS `tahun_ajaran`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_pembangunan`.`status` AS `status` from ((`uang_pembangunan` join `siswa`) join `jenis_tagihan` on(((`uang_pembangunan`.`NIS` = `siswa`.`NIS`) and (`uang_pembangunan`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `uang_pembangunan`.`tahun_ajaran` desc,`siswa`.`NIS` ;
 
 -- --------------------------------------------------------
 
@@ -884,7 +1118,25 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_lihatpembayaranpondok`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranpondok`  AS  select `uang_pondok`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_pondok`.`tahun` AS `tahun`,`uang_pondok`.`bulan` AS `bulan`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_pondok`.`status` AS `status` from ((`uang_pondok` join `siswa`) join `jenis_tagihan` on(((`uang_pondok`.`NIS` = `siswa`.`NIS`) and (`uang_pondok`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `siswa`.`NIS` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpembayaranpondok`  AS  select `uang_pondok`.`pembayaran_id` AS `pembayaran_id`,`siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`uang_pondok`.`tahun` AS `tahun`,`uang_pondok`.`bulan` AS `bulan`,`jenis_tagihan`.`jumlah` AS `jumlah`,`uang_pondok`.`status` AS `status` from ((`uang_pondok` join `siswa`) join `jenis_tagihan` on(((`uang_pondok`.`NIS` = `siswa`.`NIS`) and (`uang_pondok`.`tagihan_id` = `jenis_tagihan`.`tagihan_id`)))) order by `uang_pondok`.`tahun` desc,`uang_pondok`.`bulan` desc,`siswa`.`NIS` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_lihatpengeluaran`
+--
+DROP TABLE IF EXISTS `v_lihatpengeluaran`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatpengeluaran`  AS  select `pengeluaran`.`pengeluaran_id` AS `pengeluaran_id`,`pengeluaran`.`jumlah` AS `jumlah`,`pengeluaran`.`tgl_dipakai` AS `tgl_dipakai`,`pengeluaran`.`keterangan` AS `keterangan` from `pengeluaran` order by `pengeluaran`.`tgl_dipakai` desc ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_lihatsiswaaktif`
+--
+DROP TABLE IF EXISTS `v_lihatsiswaaktif`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_lihatsiswaaktif`  AS  select `siswa`.`NIS` AS `NIS`,`siswa`.`nama` AS `nama`,`siswa`.`jenis_kelamin` AS `jenis_kelamin`,`siswa`.`alamat` AS `alamat`,`siswa`.`tgl_masuk` AS `tgl_masuk`,`siswa`.`status` AS `status` from `siswa` where (`siswa`.`status` = 'Aktif') ;
 
 --
 -- Indexes for dumped tables
@@ -1062,20 +1314,20 @@ ALTER TABLE `uang_spp`
 --
 ALTER TABLE `pembayaran_bimbel`
   ADD CONSTRAINT `constraint_cb_1` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `constraint_cb_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_bimbel` (`pembayaran_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `constraint_cb_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_bimbel` (`pembayaran_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pembayaran_buku`
 --
 ALTER TABLE `pembayaran_buku`
   ADD CONSTRAINT `pembayaran_buku_constraint_1` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `pembayaran_buku_constraint_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_buku` (`pembayaran_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `pembayaran_buku_constraint_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_buku` (`pembayaran_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pembayaran_pembangunan`
 --
 ALTER TABLE `pembayaran_pembangunan`
-  ADD CONSTRAINT `pembayaran_pembangunan_1` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_pembangunan` (`pembayaran_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `pembayaran_pembangunan_1` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_pembangunan` (`pembayaran_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `pembayaran_pembangunan_2` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE;
 
 --
@@ -1083,7 +1335,7 @@ ALTER TABLE `pembayaran_pembangunan`
 --
 ALTER TABLE `pembayaran_pondok`
   ADD CONSTRAINT `pembayaran_pondok_constraint_1` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`pegawai_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `pembayaran_pondok_constraint_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_pondok` (`pembayaran_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `pembayaran_pondok_constraint_2` FOREIGN KEY (`pembayaran_id`) REFERENCES `uang_pondok` (`pembayaran_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pembayaran_spp`

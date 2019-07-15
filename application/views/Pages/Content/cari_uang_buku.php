@@ -12,19 +12,21 @@
         	<?php if($this->session->flashdata('error')){?>
         		<div class="alert alert-danger"><?php echo $this->session->flashdata('error')?></div>
         	<?php }?>
+        	<div class="alert alert-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Mencari siswa bernama '<?php echo $nama;?>'</div>
               <div class="card-header ">
                 <h5 class="card-title"><center>Pembayaran Uang Buku</center></h5>
 				<div class="form-row">
 					<div class="form-group col-md-5">
-					<form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/cari_buku')?>">
-						<label for="inputEmail4">Nama</label>
-						<input type="text" class="form-control" name="nama" id="inputEmail4" placeholder="Nama Siswa">
+						<form method="post" action="<?php echo base_url('index.php/Pegawai_Controller/cari_buku')?>">
+						<label for="inputPassword4">Nama Siswa</label>
+						<input type="text" class="form-control" name="nama" placeholder="Nama Siswa">
 					</div>
+					
 					<div class="form-group col-md-2">
 					</div>
 					<div class="form-group col-md-2">
 						</br>
-						<button type="submit" class="btn btn-primary">Cari</button>
+						<button type="button" class="btn btn-primary">Cari</button>
 						</form>
 					</div>
 					</div>
