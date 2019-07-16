@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 15, 2019 at 06:07 AM
+-- Generation Time: Jul 16, 2019 at 11:06 AM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -177,11 +177,12 @@ CREATE TABLE `pegawai` (
 --
 
 INSERT INTO `pegawai` (`pegawai_id`, `pegawai_password`, `nama_depan`, `nama_belakang`, `no_handphone`, `alamat`, `level`, `status`) VALUES
-(100001, 'root', 'Ananda', 'Muharriz Sinaga', '+6287898365680', 'Jl. Pala Raya No.77 Perumnas Simalingkar', 'Bendahara', 'Aktif'),
+(100001, 'root', 'Ananda', 'Muharriz Sinago', '+6287898365680', 'Jl. Pala Raya No.77 Perumnas Simalingkar', 'Bendahara', 'Aktif'),
 (100002, 'root', 'Nadia', 'Nasywa', '+6285270069700', 'Jl.Marelan VII Gg.Amal I No 20', 'Staff', 'Aktif'),
 (100003, 'root', 'Rafif', 'Rasyidi', '+6282172694268', 'Jl.Gunung Tua no 45', 'Staff', 'Aktif'),
 (100004, 'root', 'Dinul ', 'Iman', '+6283167298340', 'Jl.Pancing no 37', 'Yayasan', 'Aktif'),
-(100005, 'root', 'Deby', 'Salsabila', '+6287825638729', 'Jl.Dumai no 81', 'Staff', 'Aktif');
+(100005, 'root', 'Deby', 'Salsabila', '+6287825638729', 'Jl.Dumai no 81', 'Staff', 'Aktif'),
+(100006, 'rina', 'Rina', 'Rahmayanti', '+6273849587364', 'Jln. Mamiyai no.12', 'Bendahara', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -412,7 +413,7 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`NIS`, `nama`, `jenis_kelamin`, `alamat`, `tgl_masuk`, `status`) VALUES
-('1214001', 'amirah husni', 'Perempuan', 'jl.sinar no 77', '2014-06-01', 'Aktif'),
+('1214001', 'amirah husnu', 'Laki laki', 'jl.sinar no 77', '2014-06-01', 'Aktif'),
 ('1214002', 'andieni chayakamil', 'Perempuan', 'jl.hiu no 2', '2014-06-01', 'Aktif'),
 ('1214003', 'azra nazifah', 'Perempuan', 'jl.dutik no 69', '2014-06-01', 'Aktif'),
 ('1214004', 'badzlina atika salsabila', 'Perempuan', 'jl.kupol no 91', '2014-06-01', 'Aktif'),
@@ -622,8 +623,7 @@ INSERT INTO `siswa` (`NIS`, `nama`, `jenis_kelamin`, `alamat`, `tgl_masuk`, `sta
 ('1714021', 'yusnia rani', 'Perempuan', 'jl.bue no 6', '2019-06-01', 'Aktif'),
 ('1714022', 'rosmita ragil', 'Perempuan', 'jl.kio no 4', '2019-06-01', 'Aktif'),
 ('1714023', 'monica ginting', 'Perempuan', 'jl.nuy no 3', '2019-06-01', 'Aktif'),
-('1714024', 'fatimah zahra', 'Perempuan', 'jl.tui no 2', '2019-06-01', 'Tidak Aktif'),
-('1714025', 'annisa humairah', 'Perempuan', 'jl.guy no 4', '2019-06-01', 'Tidak Aktif');
+('1714024', 'fatimah zahra', 'Perempuan', 'jl.tui no 2', '2019-06-01', 'Tidak Aktif');
 
 -- --------------------------------------------------------
 
@@ -1261,7 +1261,7 @@ ALTER TABLE `jenis_tagihan`
 -- AUTO_INCREMENT for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  MODIFY `pegawai_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100006;
+  MODIFY `pegawai_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100007;
 
 --
 -- AUTO_INCREMENT for table `pengeluaran`

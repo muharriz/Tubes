@@ -72,10 +72,13 @@
 							<a href="<?php echo base_url('index.php/Pegawai_Controller/lihat_siswa')?>">Lihat Siswa</a>
 						</li>
 						<li>
-							<a href="<?php echo base_url('index.php/Pegawai_Controller/tagihan')?>">Tagihan</a>
+							<a href="<?php echo base_url('index.php/Pegawai_Controller/daftar_pegawai')?>">Tambah Pegawai</a>
 						</li>
 						<li>
-							<a href="#">Pegawai</a>
+							<a href="<?php echo base_url('index.php/Pegawai_Controller/lihat_pegawai')?>">Lihat Pegawai</a>
+						</li>
+						<li>
+							<a href="<?php echo base_url('index.php/Pegawai_Controller/tagihan')?>">Tagihan</a>
 						</li>
 					</ul>
 				  </a>

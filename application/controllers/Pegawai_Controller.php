@@ -1575,6 +1575,20 @@ class Pegawai_Controller extends CI_Controller {
 			redirect(base_url('index.php/Pegawai_Controller/lihat_siswa'));
 		}
 	}
+	public function nonaktifkan_pegawai($id){
+		
+		if($this->Pegawai_Model->nonaktifkan_pegawai($id)){
+			$this->session->set_flashdata('success', 'Pegawai Berhasil Dinonaktifkan !');
+			redirect(base_url('index.php/Pegawai_Controller/lihat_pegawai'));
+		}
+	}
+	public function aktifkan_pegawai($id){
+		
+		if($this->Pegawai_Model->aktifkan_pegawai($id)){
+			$this->session->set_flashdata('success', 'Pegawai Berhasil Diaktifkan !');
+			redirect(base_url('index.php/Pegawai_Controller/lihat_pegawai'));
+		}
+	}
 
 	// Fungsi untuk membuka halaman update uang siswa
 	public function halaman_edit_siswa($nis){
@@ -1588,6 +1602,18 @@ class Pegawai_Controller extends CI_Controller {
 		$this->session->set_userdata('halaman','edit_data_siswa');
 
 		$this->load->view('Pages/main',$data_siswa);
+	}
+	public function halaman_edit_pegawai($pegawai_id){
+		$data = array(
+						'pegawai_id' => $pegawai_id
+		);
+
+		$data_pegawai['data'] =  $this->Pegawai_Model->ambil_data_pegawai($data);
+		$data_pegawai['pegawai_id'] = $pegawai_id;
+
+		$this->session->set_userdata('halaman','edit_data_pegawai');
+
+		$this->load->view('Pages/main',$data_pegawai);
 	}
 
 	//Fungsi untuk menyimpan update uang siswa
@@ -1693,15 +1719,184 @@ class Pegawai_Controller extends CI_Controller {
 
 		$this->load->view('Pages/main',$data);
 	}
+	// fungsi untuk membuka halaman daftar pegawai
+	public function daftar_pegawai(){
+		$this->session->set_userdata('halaman','daftar_pegawai');
+		$this->load->view('Pages/main');	
+	}
+	//fitur untuk menambah data pegawai
+	public function tambah_pegawai(){
 
+			$data = array(
+							'nama_depan' => $this->input->post('nama_depan'),
+							'nama_belakang' => $this->input->post('nama_belakang'),
+							'no_handphone' => $this->input->post('no_handphone'),
+							'alamat' => $this->input->post('alamat'),
+							'level' => $this->input->post('level'),
+							'status' => $this->input->post('status'),
+							'pegawai_password' => $this->input->post('pegawai_password')
+							
+			);
 
+			$status = $this->Pegawai_Model->tambah_pegawai($data,'pegawai');
 
+			if($status){
+				$this->session->set_flashdata('success','Data berhasil ditambah!');
+				redirect(base_url('index.php/Pegawai_Controller/daftar_pegawai'));
+			}
+			else{
+				$this->session->set_flashdata('error','Data gagal dimasukkan, harap periksa kembali data anda!');
+				redirect(base_url('index.php/Pegawai_Controller/daftar_pegawai'));
+			}
 
+		}
+		//Fungsi ke halaman cari pegawai
+	public function cari_pegawai(){
+		$nama = $this->input->post('nama');
+		redirect(base_url('index.php/Pegawai_Controller/cari_nama_pegawai/'.$nama));
+	}
+	//Fungsi menampilkan halaman sesuai nama yang diberikan
+	public function cari_nama_pegawai($nama){
+		$this->session->set_userdata('halaman','cari_pegawai');
 
+		$jumlah_baris = $this->Pegawai_Model->jumlah_data_cari_pegawai($nama);
+		$page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
 
+		// ngambil record sekarang
+		$config['base_url'] = base_url().'index.php/Pegawai_Controller/cari_nama_pegawai/'.$nama;
+		$config['total_rows'] = $jumlah_baris->total;
+		$config['per_page'] = 10;
+		$config["uri_segment"] = 3;
+		$config["cur_page"] = ($this->uri->segment(4)) ? ($this->uri->segment(4)) : 1;
+		
+		//custom pagination
+            $config['num_links'] = 2;
+            $config['use_page_numbers'] = TRUE;
+            $config['reuse_query_string'] = TRUE;
+             
+            $config['full_tag_open'] = '<div class="pagination">';
+            $config['full_tag_close'] = '</div>';
+             
+            $config['first_link'] = '&nbspHalaman Pertama&nbsp';
+            $config['first_tag_open'] = '<span class="firstlink"></span>&nbsp <span>';
+            $config['first_tag_close'] = '</span>';
+             
+            $config['last_link'] = '&nbspHalaman Terakhir&nbsp';
+            $config['last_tag_open'] = '<span class="lastlink">';
+            $config['last_tag_close'] = '</span>';
+             
+            $config['next_link'] = '&nbspHalaman Selanjutnya&nbsp';
+            $config['next_tag_open'] = '<span class="nextlink">';
+            $config['next_tag_close'] = '</span>';
+ 
+            $config['prev_link'] = '&nbspHalaman Sebelumnya&nbsp';
+            $config['prev_tag_open'] = '<span class="prevlink">';
+            $config['prev_tag_close'] = '</span>';
+ 
+            $config['cur_tag_open'] = '&nbsp<span class="curlink">&nbsp';
+            $config['cur_tag_close'] = '</span>';
+ 
+            $config['num_tag_open'] = '&nbsp<span class="numlink">&nbsp';
+            $config['num_tag_close'] = '</span>';		
+		
+		$this->pagination->initialize($config);
+		$data['pagination'] = $this->pagination->create_links();
 
-	
+		$page = ($page * $config['per_page']);
+		$data['data'] = $this->Pegawai_Model->cari_pegawai($nama,'pegawai','nama',$config['per_page'],$page);
+		$data['nama'] = $nama;
 
+		$this->load->view('Pages/main',$data);
+	}
+	public function lihat_pegawai(){
+		$this->session->set_userdata('halaman','lihat_pegawai');
+
+		$jumlah_baris = $this->Pegawai_Model->jumlah_data_pegawai();
+		$page = ($this->uri->segment(3)) ? ($this->uri->segment(3) - 1) : 0;
+
+		// ngambil record sekarang
+		$config['base_url'] = base_url().'index.php/Pegawai_Controller/lihat_pegawai';
+		$config['total_rows'] = $jumlah_baris->total;
+		$config['per_page'] = 10;
+		$config["uri_segment"] = 3;
+		
+		//custom pagination
+            $config['num_links'] = 2;
+            $config['use_page_numbers'] = TRUE;
+            $config['reuse_query_string'] = TRUE;
+             
+            $config['full_tag_open'] = '<div class="pagination">';
+            $config['full_tag_close'] = '</div>';
+             
+            $config['first_link'] = '&nbspHalaman Pertama&nbsp';
+            $config['first_tag_open'] = '<span class="firstlink"></span>&nbsp <span>';
+            $config['first_tag_close'] = '</span>';
+             
+            $config['last_link'] = '&nbspHalaman Terakhir&nbsp';
+            $config['last_tag_open'] = '<span class="lastlink">';
+            $config['last_tag_close'] = '</span>';
+             
+            $config['next_link'] = '&nbspHalaman Selanjutnya&nbsp';
+            $config['next_tag_open'] = '<span class="nextlink">';
+            $config['next_tag_close'] = '</span>';
+ 
+            $config['prev_link'] = '&nbspHalaman Sebelumnya&nbsp';
+            $config['prev_tag_open'] = '<span class="prevlink">';
+            $config['prev_tag_close'] = '</span>';
+ 
+            $config['cur_tag_open'] = '&nbsp<span class="curlink">&nbsp';
+            $config['cur_tag_close'] = '</span>';
+ 
+            $config['num_tag_open'] = '&nbsp<span class="numlink">&nbsp';
+            $config['num_tag_close'] = '</span>';		
+		
+		$this->pagination->initialize($config);
+		$data['pagination'] = $this->pagination->create_links();
+
+		$page = ($page * $config['per_page']);
+		$data['data'] = $this->Pegawai_Model->lihat_pegawai($config['per_page'],$page);
+
+		$this->load->view('Pages/main',$data);
+	}
+	//fungsi untuk edit pegawai
+	public function update_data_pegawai($pegawai_id){
+		$this->form_validation->set_rules(
+											'alamat','Alamat','required|min_length[5]',
+											array(
+													'required' => 'Anda belum mengisi %s, harap periksa kembali!'
+											)
+
+		);
+		if($this->form_validation->run() == FALSE){
+			$this->session->set_flashdata('error','Data gagal diubah, harap periksa kembali data anda!');
+			redirect(base_url('index.php/Pegawai_Controller/halaman_edit_pegawai/').$id);
+		}
+		else{
+
+			$data = array(
+							'pegawai_id' => $pegawai_id,
+							'nama_depan' => $this->input->post('nama_depan'),
+							'nama_belakang' => $this->input->post('nama_belakang'),
+							'no_handphone' => $this->input->post('no_handphone'),
+							'alamat' => $this->input->post('alamat'),
+							'level' => $this->input->post('level'),
+							'status' => $this->input->post('status')
+			);
+
+			$status = $this->Pegawai_Model->update_data_pegawai($data);
+
+			if($status){
+				$this->session->set_flashdata('success','Data berhasil diubah!');
+				redirect(base_url('index.php/Pegawai_Controller/lihat_pegawai'));
+			}
+			else{
+				$this->session->set_flashdata('error','Data gagal diubah, harap periksa kembali data anda!');
+				redirect(base_url('index.php/Pegawai_Controller/lihat_pegawai'));
+			}
+
+		}
+
+	}
 	//fungsi untuk membuka halaman tagihan
 	public function tagihan(){
 		$this->session->set_userdata('halaman','tagihan');

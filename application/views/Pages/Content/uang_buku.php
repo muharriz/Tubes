@@ -109,12 +109,13 @@
 										?>
 									</td>
 									<td>
+									<center>
 										<a class="btn btn-warning" href="<?php echo base_url('index.php/Pegawai_Controller/halaman_edit_uang_buku/').$i->pembayaran_id?>">Edit</a>	
 										
 										<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal<?php echo $i->pembayaran_id?>">Hapus</button>
 										
 										<?php if($i->status != 'Lunas'){?>
-										<a class="btn btn-success" href="<?php echo base_url('index.php/Pegawai_Controller/halaman_bayar_uang_buku/').$i->pembayaran_id?>">Bayar</a></td>
+										<a class="btn btn-success" href="<?php echo base_url('index.php/Pegawai_Controller/halaman_bayar_uang_buku/').$i->pembayaran_id?>">Bayar</a></center></td>
 										<?php } ?>
 								</tr>
 								<div class="modal fade" id="exampleModal<?php echo $i->pembayaran_id?>" tabindex="-1" role="dialog" aria-labelledby="ExampleModallTittle" aria=hidden="true">

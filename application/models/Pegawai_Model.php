@@ -96,6 +96,10 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->insert($table,$data);
 		return $result;
 	}
+	public function tambah_pegawai($data,$table){
+		$result = $this->db->insert($table,$data);
+		return $result;
+	}
 	public function tambah_pengeluaran($data,$table){
 		$result = $this->db->insert($table,$data);
 		return $result;
@@ -190,8 +194,16 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->query("Select jumlah_data_siswa() as total");
 		return $result->row();
 	}
+	public function jumlah_data_pegawai(){
+		$result = $this->db->query("Select jumlah_pegawai() as total");
+		return $result->row();
+	}
 	public function lihat_siswa($number,$offset){
 		$result = $this->db->query("select * from siswa order by status ASC,tgl_masuk ASC,NIS ASC limit ".$number." offset ".$offset."");
+		return $result->result();
+	}
+	public function lihat_pegawai($number,$offset){
+		$result = $this->db->query("select * from v_lihatpegawai");
 		return $result->result();
 	}
 	public function hapus_siswa($id){
@@ -206,16 +218,36 @@ class Pegawai_Model extends CI_Model {
 		$result = $this->db->query("update siswa set status = 'Aktif' where NIS like '".$id."'");
 		return $result;
 	}
+	public function nonaktifkan_pegawai($id){
+		$result = $this->db->query("update pegawai set status = 'Tidak Aktif' where pegawai_id like '".$id."'");
+		return $result;
+	}
+	public function aktifkan_pegawai($id){
+		$result = $this->db->query("update pegawai set status = 'Aktif' where pegawai_id like '".$id."'");
+		return $result;
+	}
 	public function ambil_data_siswa($data){
 		$result = $this->db->get_where('siswa',$data);
+		return $result->row();
+	}
+	public function ambil_data_pegawai($data){
+		$result = $this->db->get_where('pegawai',$data);
 		return $result->row();
 	}
 	public function update_data_siswa($data){
 		$result = $this->db->query("update siswa set nama='".$data['nama']."',jenis_kelamin='".$data['jenis_kelamin']."',alamat='".$data['alamat']."',tgl_masuk='".$data['tgl_masuk']."',status='".$data['status']."' where NIS= '".$data['NIS']."'");
 		return $result;
 	}
+	public function update_data_pegawai($data){
+		$result = $this->db->query("update pegawai set nama_depan='".$data['nama_depan']."',nama_belakang='".$data['nama_belakang']."',no_handphone='".$data['no_handphone']."',alamat='".$data['alamat']."',level='".$data['level']."',status='".$data['status']."' where pegawai_id= '".$data['pegawai_id']."'");
+		return $result;
+	}
 	public function cari_siswa($nama,$table,$namakolom,$number,$offset){
 		$result = $this->db->query("select * from ".$table." where ".$namakolom." like '%".$nama."%' limit ".$number." offset ".$offset);
+		return $result->result();
+	}
+	public function cari_pegawai($nama,$table,$namakolom,$number,$offset){
+		$result = $this->db->query("select * from v_lihatpegawai where ".$namakolom." like '%".$nama."%' limit ".$number." offset ".$offset);
 		return $result->result();
 	}
 
@@ -241,6 +273,10 @@ class Pegawai_Model extends CI_Model {
 	}
 	public function jumlah_data_cari_siswa($nama){
 		$result = $this->db->query("Select count(*) as total from siswa where nama like '%".$nama."%'");
+		return $result->row();
+	}
+	public function jumlah_data_cari_pegawai($nama){
+		$result = $this->db->query("Select count(*) as total from v_lihatpegawai where nama like '%".$nama."%'");
 		return $result->row();
 	}
 

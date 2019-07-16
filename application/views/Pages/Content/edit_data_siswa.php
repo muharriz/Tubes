@@ -14,7 +14,7 @@
         		<div class="alert alert-danger"><?php echo $this->session->flashdata('error')?></div>
         	<?php }?>
               <div class="card-header ">
-                <h5 class="card-title"><center>Edit Infaq</center></h5>
+                <h5 class="card-title"><center>Edit Siswa</center></h5>
 				<div class="form-row">
 					<div class="form-group col-md-4">
 					</div>

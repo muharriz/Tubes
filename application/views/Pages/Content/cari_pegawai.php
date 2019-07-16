@@ -107,15 +107,14 @@
 									<td><?php echo $i->alamat; ?></td>
 									<td><?php echo $i->level; ?></td>
 									<td><?php echo $i->status; ?></td>
-									<td><center>
-										<a class="btn btn-warning"  href="<?php echo base_url('index.php/Pegawai_Controller/halaman_edit_pegawai/').$i->pegawai_id?>">Edit</a>
+									<td>
+										<a class="btn btn-warning"  href="<?php echo base_url('index.php/Pegawai_Controller/halaman_edit_pegawai/').$i->NIS?>">Edit</a>
 										<?php if($i->status == 'Aktif'){?>
-										<a class="btn btn-danger" href="<?php echo base_url('index.php/Pegawai_Controller/nonaktifkan_pegawai/').$i->pegawai_id?>">Nonaktif</a>
+										<a class="btn btn-warning" href="<?php echo base_url('index.php/Pegawai_Controller/nonaktifkan_pegawai/').$i->NIS?>">Nonaktif</a>
 										<?php } ?>
 										<?php if($i->status == 'Tidak Aktif'){?>
-										<a class="btn btn-primary" href="<?php echo base_url('index.php/Pegawai_Controller/aktifkan_pegawai/').$i->pegawai_id?>">Aktifkan</a>
+										<a class="btn btn-success" href="<?php echo base_url('index.php/Pegawai_Controller/aktifkan_pegawai/').$i->NIS?>">Aktifkan</a>
 										<?php } ?>
-										</center>
 									</td>
 								</tr>
 								
